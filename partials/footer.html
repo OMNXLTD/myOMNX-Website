@@ -1,0 +1,90 @@
+<footer class="footer footer--inverse" role="contentinfo">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <!-- Left: links + logo -->
+      <div class="footer-col footer-col--brand">
+        <ul class="footer-links">
+          <li>
+            <a class="footer-link" href="mailto:contact@myomnx.com">contact@myomnx.com</a>
+          </li>
+          <li>
+            <a class="footer-link" href="https://www.linkedin.com/company/myomnx" target="_blank"
+              rel="noopener">LinkedIn</a>
+          </li>
+        </ul>
+
+        <!-- Prefer an inverse SVG if available -->
+        <a class="footer-logo" href="/" aria-label="OMNX home">
+          <img src="assets/Omnx-text-logo-inv.svg" width="220" height="48" alt="OMNX" loading="lazy">
+        </a>
+
+        <ul class="footer-links">
+          <li>
+            <a class="footer-link" href="privacy-notice.html">Privacy Policy</a>
+          </li>
+          <li>
+            <a class="footer-link" href="terms-and-conditions.html">Terms & Conditions</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right: signup -->
+      <div class="footer-col footer-col--signup">
+        <h2 class="footer-title">Stay active.</h2>
+        <p class="footer-copy">Get early access, and playful recovery tips—straight to your inbox.</p>
+
+        <p class="form-status" id="subscribeStatus" aria-live="polite"></p>
+
+        <iframe
+          name="omnx_gas_iframe"
+          id="omnx_gas_iframe"
+          style="position:absolute;left:-9999px;width:1px;height:1px;border:0;"
+        ></iframe>
+
+        <form
+          id="subscribe-form"
+          class="footer-form"
+          method="POST"
+          target="omnx_gas_iframe"
+          novalidate
+          data-omnx-form="newsletter-footer"
+        >
+          <!-- honeypot -->
+          <input type="text" name="_hp" autocomplete="off" tabindex="-1" style="position:absolute; left:-9999px; opacity:0; height:0; width:0;">
+          
+          <input type="hidden" id="subscribeState" name="state" value="">
+          <input type="hidden" id="subscribeOrigin" name="origin" value="">
+          <input type="hidden" name="formType" value="newsletter">
+
+          <input
+            class="footer-input"
+            id="subscribe-email"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            placeholder="Email"
+            required
+          >
+
+          <button class="cta-button" type="submit" id="subscribeSubmit">
+            <span class="button_label">Subscribe</span>
+          </button>
+        </form>
+
+        <div class="footer-msg footer-msg--success" hidden></div>
+        <div class="footer-msg footer-msg--error" hidden></div>
+
+        <p class="policy">
+          See <a class="policy-link" href="privacy-notice.html">Privacy</a> Notice for details.
+        </p>
+      </div>
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="footer-bottom">
+      <small class="footer-legal">© 2025 OMNX. All rights reserved.</small>
+    </div>
+  </div>
+</footer>

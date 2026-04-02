@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 507.59 474.04">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #231f20;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+        stroke-width: 30px;
+      }
+    </style>
+  </defs>
+  <g id="quiet-vibration">
+    <path class="cls-1" d="M59.07,102.83c64.91,0,64.91-32,129.81-32,64.91,0,64.91,32,129.82,32,64.91,0,64.91-32,129.82-32"/>
+    <path class="cls-1" d="M59.07,252.19c64.91,0,64.91-32,129.81-32,64.91,0,64.91,32,129.82,32s64.91-32,129.82-32"/>
+    <path class="cls-1" d="M59.07,401.55c64.91,0,64.91-32,129.81-32,64.91,0,64.91,32,129.82,32s64.91-32,129.82-32"/>
+  </g>
+</svg>

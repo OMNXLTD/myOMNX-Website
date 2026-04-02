@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <title>OMNX — Support</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="Have questions about OMNX or our OMGO products? Contact us for support, feedback, or partnership opportunities. We're here to help."
+  />
+
+  <!-- Open Graph / Twitter (optional but nice for shares) -->
+  <meta property="og:title" content="Contact OMNX – Reach Out for Support and Inquiries" />
+  <meta
+    property="og:description"
+    content="Have questions about OMNX or our OMGO products? Contact us for support, feedback, or partnership opportunities. We're here to help."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://myomnx.com/support" />
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="Contact OMNX – Reach Out for Support and Inquiries" />
+  <meta
+    property="twitter:description"
+    content="Have questions about OMNX or our OMGO products? Contact us for support, feedback, or partnership opportunities. We're here to help."
+  />
+
+  <link rel="canonical" href="https://myomnx.com/support" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/universal.css" />
+  <link rel="icon" href="assets/favicon.jpg" type="image/x-icon" />
+
+  <!-- reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<!-- Same loader pattern as index.html -->
+<script defer src="js/loading.js"></script>
+
+<body class="body">
+  <!-- NAVBAR -->
+  <div data-include="partials/nav.html"></div>
+
+  <main>
+    <!-- INTRO / COPY BLOCK -->
+    <section class="section contact">
+      <div class="section__inner">
+        <div class="section-grid section-grid--2">
+          <div class="section-grid-element">
+            <div class="eyebrow">LET'S CONNECT</div>
+            <h1 class="contact-heading">Reach out. Move forward.</h1>
+            <p class="subheading">
+              Questions, ideas, or feedback? At <strong>OMNX</strong>, every conversation helps us refine
+              how people move, recover, and perform.
+            </p>
+            <p class="paragraph">
+              Drop us a message and we’ll respond within <strong>24 hours</strong> — whether you’re curious
+              about <strong>OMGO Sphere</strong>, <strong>OMGO Mini</strong>, or exploring potential
+              partnerships.
+            </p>
+          </div>
+
+          <!-- WEBSITE CONTACT FORM -->
+          <div class="section-grid-element">
+            <div class="form-container">
+              <p class="form-status" id="contactStatus" aria-live="polite"></p>
+
+              <iframe name="omnx_gas_iframe" id="omnx_gas_iframe" style="position:absolute;left:-9999px;width:1px;height:1px;border:0;"></iframe>
+
+              <form
+                id="contactForm"
+                class="omnx-website-form"
+                method="POST"
+                target="omnx_gas_iframe"
+                novalidate
+                data-omnx-form="contact-form"
+              >
+                <!-- honeypot (keep) -->
+                <input type="text" name="_hp" autocomplete="off" tabindex="-1" style="position:absolute; left:-9999px; opacity:0; height:0; width:0;">
+                <input type="hidden" name="formType" value="contact" />
+                <input type="hidden" name="state" id="contactState" value="" />
+                <input type="hidden" name="origin" id="contactOrigin" value="" />
+
+                <div class="form-grid">
+                  <label class="form-label">
+                    Name *
+                    <input
+                      type="text"
+                      name="name"
+                      class="form-input"
+                      required
+                    />
+                  </label>
+
+                  <label class="form-label">
+                    Email *
+                    <input
+                      type="email"
+                      name="email"
+                      class="form-input"
+                      required
+                    />
+                  </label>
+                </div>
+
+                <label class="form-label">
+                  Subject *
+                  <input
+                    type="text"
+                    name="subject"
+                    class="form-input"
+                    required
+                  />
+                </label>
+
+                <label class="form-label">
+                  Message *
+                  <textarea
+                    name="message"
+                    rows="5"
+                    class="form-input"
+                    required
+                  ></textarea>
+                </label>
+
+                <p class="policy">
+                  This site is protected by reCAPTCHA and the Google
+                  <a class="policy-link" href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a>
+                  and
+                  <a class="policy-link" href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms of Service</a>
+                  apply.
+                </p>
+
+                <!-- reCAPTCHA widget (v2 checkbox example) -->
+                <div class="form-row">
+                  <div
+                    class="g-recaptcha"
+                    data-sitekey="6LeXEhwsAAAAAOHeFviGvoenrkE4uQ79H53WCod-"
+                  ></div>
+                </div>
+
+                <p class="policy">We’ll use your details to respond. See <a class="policy-link" href="privacy-notice.html">Privacy</a> Notice.</p>
+
+                <button type="submit" class="cta-button primary">
+                  <div class="button_label">Send message</div>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEAM CONTACT CARDS -->
+    <section class="section">
+      <div class="section__inner">
+        <div class="header">
+          <div class="eyebrow">FIND YOUR RIGHT TEAM</div>
+          <h2 class="heading">Direct contact channels</h2>
+          <p class="subheading">
+            Choose the address that best fits your query — it helps us respond faster and more precisely.
+          </p>
+        </div>
+
+        <ul class="section-grid section-grid--3" role="list">
+          <li class="card">
+            <div class="card_body">
+              <h3 class="team-title">General Inquiries</h3>
+              <p class="text-color_secondary">Drop us a message anytime.</p>
+              <a class="text-link is-secondary" href="mailto:contact@myomnx.com?subject=Contact%20us">
+                contact@myomnx.com
+              </a>
+            </div>
+          </li>
+
+          <li class="card">
+            <div class="card_body">
+              <h3 class="team-title">Your Customer Support Team</h3>
+              <p class="text-color_secondary">Everyday, 6am–6pm (GMT +0)</p>
+              <a
+                class="text-link is-secondary"
+                href="mailto:mysupport@myomnx.com?subject=My%20Support%20Team"
+              >
+                mysupport@myomnx.com
+              </a>
+            </div>
+          </li>
+
+          <li class="card">
+            <div class="card_body">
+              <h3 class="team-title">Press &amp; Outreach Team</h3>
+              <p class="text-color_secondary">Weekdays, 9am–5pm (GMT +0)</p>
+              <a class="text-link is-secondary" href="mailto:press@myomnx.com?subject=Press">
+                press@myomnx.com
+              </a>
+            </div>
+          </li>
+
+          <li class="card">
+            <div class="card_body">
+              <h3 class="team-title">Sales &amp; Marketing Team</h3>
+              <p class="text-color_secondary">Weekdays, 9am–5pm (GMT +0)</p>
+              <a
+                class="text-link is-secondary"
+                href="mailto:sales@myomnx.com?subject=Sales%20%26%20Marketing"
+              >
+                sales@myomnx.com
+              </a>
+            </div>
+          </li>
+
+          <li class="card">
+            <div class="card_body">
+              <h3 class="team-title">R&amp;D and Operations</h3>
+              <p class="text-color_secondary">24/7</p>
+              <a
+                class="text-link is-secondary"
+                href="mailto:operation@myomnx.com?subject=R%26D%20and%20Operations"
+              >
+                operation@myomnx.com
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <div data-include="partials/footer.html"></div>
+
+  <!-- Scripts -->
+  <script defer src="js/script.js"></script>
+  <script defer src="js/partials.js"></script>
+</body>
+</html>

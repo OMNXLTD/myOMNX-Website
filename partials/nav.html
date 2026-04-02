@@ -1,0 +1,180 @@
+<div class="nav">
+  <!-- Nav bar -->
+  <div
+    data-duration="400"
+    data-animation="default"
+    data-easing2="ease"
+    data-easing="ease"
+    data-collapse="medium"
+    role="banner"
+    data-no-scroll="1"
+    class="nav_container"
+  >
+    <div class="nav_left">
+      <a href="/" class="site-logo js-anim-nav" aria-label="OMNX home">
+        <img
+          src="assets/Omnx-text-logo.svg"
+          width="140"
+          height="32"
+          alt="OMNX"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </a>
+
+      <!-- DESKTOP NAV -->
+      <nav role="navigation" class="nav_menu">
+        <div class="nav-tabs-container">
+          <ul class="nav_menu-list">
+            <!-- OMGO (dropdown trigger) -->
+            <li class="nav_menu-list-item has-dropdown">
+              <button class="nav_link dropdown-toggle" type="button" data-href="omgo.html" aria-expanded="false">
+                <span>OMGO</span>
+              </button>
+              <ul class="dropdown-menu"></ul>
+            </li>
+
+            <li class="nav_menu-list-item">
+              <a href="myomnx-plus.html" class="nav_link">myOMNX +</a>
+            </li>
+
+            <li class="nav_menu-list-item">
+              <a href="pre-launch-sign-up.html" class="nav_link">Pre-launch</a>
+            </li>
+
+            <li class="nav_menu-list-item">
+              <a href="about-omnx.html" class="nav_link">About OMNX</a>
+            </li>
+
+            <li class="nav_menu-list-item">
+              <a href="support.html" class="nav_link">Support</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="nav_right">
+      <!-- Free Trial Button -->
+      <a href="pre-launch-sign-up.html" class="cta-button">Free Trial £0</a>
+
+      <!-- SINGLE MOBILE MENU TOGGLE (used by JS) -->
+      <button
+        class="mobile-nav-toggle"
+        id="mobile-menu-toggle"
+        aria-label="Menu"
+        aria-expanded="false"
+      >
+        <ion-icon name="menu-outline" class="menu-icon"></ion-icon>
+      </button>    
+    </div>
+  </div>
+
+  <!-- Mega drop down menu -->
+  <div class="mega-overlay" data-mega-overlay hidden></div>
+
+  <div class="mega" id="mega-products" role="region" aria-label="Products menu" hidden>
+    <div class="mega-inner">
+      <div class="mega-grid">
+        <!-- Column: Smart Recovery -->
+        <section class="mega-col">
+          <div class="eyebrow">SMART RECOVERY</div>
+          <ul class="mega-list" role="list">
+            <li>
+              <a class="mega-item" href="omgo.html#see-it-in-real-action">
+                <div class="mega-item-text">
+                  <div class="mega-item-title">OMGO Sphere</div>
+                  <!-- <p class="mega-item-sub">Custom recovery, your style.</p> -->
+                </div>
+                <!-- <img class="mega-icon translatable" src="assets/omgo-sphere-icon.png" alt="" loading="lazy" width="40"
+                  height="40"> -->
+              </a>
+            </li>
+            <li>
+              <a class="mega-item" href="omgo.html#see-it-in-real-action">
+                <div class="mega-item-text">
+                  <div class="mega-item-title">OMGO Mini</div>
+                  <!-- <p class="mega-item-sub">Smallest design, portable companion.</p> -->
+                </div>
+                <!-- <img class="mega-icon translatable" src="assets/omgo-mini-icon.png" alt="" loading="lazy" width="40"
+                  height="40"> -->
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Column: Explore more -->
+        <section class="mega-col">
+          <div class="eyebrow">EXPLORE MORE</div>
+          <ul class="mega-list" role="list">
+            <li>
+              <a class="mega-item" href="pre-launch-sign-up.html">
+                
+                <div class="mega-item-text">
+                  <div class="mega-item-title">Sign up for Product Trial</div>
+                  <!-- <p class="mega-item-sub">Get updates, try first.</p> -->
+                </div>
+                <!-- <img class="mega-icon translatable" src="assets/signup.png" alt="" loading="lazy" width="40" height="40"> -->
+              </a>
+            </li>
+            <li>
+              <a class="mega-item" href="myomnx-plus.html">
+                
+                <div class="mega-item-text">
+                  <div class="mega-item-title">Discover myOMNX +</div>
+                  <!-- <p class="mega-item-sub">Guided routines, track progress.</p> -->
+                </div>
+                <!-- <img class="mega-icon translatable" src="assets/smartphone-icon.png" alt="" loading="lazy"
+                  width="40" height="40"> -->
+              </a>
+            </li>
+            <li>
+              <a class="mega-item" href="omgo.html#see-it-in-real-action">
+                
+                <div class="mega-item-text">
+                  <div class="mega-item-title">See it in real action <span><img class="mega-icon translatable" src="assets/playbutton-icon.png" alt="" loading="lazy"
+                  width="40" height="40"></span></div>
+                  <!-- <p class="mega-item-sub">See it in motion.</p> -->
+                </div>
+                <!-- <img class="mega-icon translatable" src="assets/playbutton-icon.png" alt="" loading="lazy"
+                  width="40" height="40"> -->
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Column: Promo card -->
+        <aside class="mega-promo">
+          <a class="promo-card" href="omgo.html">
+            <div class="promo-body">
+              <h3 class="promo-title">Stay active.</h3>
+              <p class="promo-sub">Experience playful, intelligent recovery every day.</p>
+              <div class="text-button is-secondary">
+                <span>Start at £0</span>
+                <svg class="text-button-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M2 8H14.5M14.5 8L8.5 2M14.5 8L8.5 14" stroke="currentColor" stroke-width="2"
+                    stroke-linejoin="round" fill="none" />
+                </svg>
+              </div>
+            </div>
+          </a>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE MENU PANEL -->
+  <nav class="mobile-menu" hidden>
+    <button class="mobile-menu-close" aria-label="Close menu">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+
+    <ul class="mobile-menu-links">
+      <li><a href="/omgo.html">OMGO</a></li>
+      <li><a href="/myomnx-plus.html">myOMNX +</a></li>
+      <li><a href="/pre-launch-sign-up.html">Pre-launch</a></li>
+      <li><a href="/about-omnx.html">About</a></li>
+      <li><a href="/support.html">Support</a></li>
+    </ul>
+  </nav>
+</div>

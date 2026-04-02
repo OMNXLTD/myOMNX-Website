@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="2911.323" height="673.3605" viewBox="0 0 2911.323 673.3605">
+  <g id="b" data-name="Logo-inv">
+    <g id="c" data-name="X">
+      <path d="M2425.8388,165.5203c0,61.4748,83.0866,111.31,185.5791,111.31s185.5791-49.8352,185.5791-111.31" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+      <circle cx="2611.4177" cy="60.6242" r="60.6242" fill="#f2f2f3"/>
+      <path d="M2796.9968,552.2995c0-90.4656-83.0866-163.8025-185.5791-163.8025s-185.5791,73.3369-185.5791,163.8025" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+      <path d="M2871.2284,633.2659c-40.9969,0-74.2316-34.877-74.2316-77.9" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+    </g>
+    <g id="d" data-name="N">
+      <line x1="1757.7541" y1="351.9382" x2="1757.7541" y2="548.6765" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+      <path d="M2203.1437,633.2659c-40.9969,0-74.2316-34.877-74.2316-77.9v-202.6242" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+      <path d="M1757.7541,232.5584c0-61.4748,83.0866-111.31,185.5791-111.31s185.5791,49.8352,185.5791,111.31" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+    </g>
+    <g id="e" data-name="M">
+      <path d="M1460.8275,232.5584c0-61.4748-66.4693-111.31-148.4633-111.31s-148.4633,49.8352-148.4633,111.31c0-61.4748-66.4693-111.31-148.4633-111.31s-148.4633,49.8352-148.4633,111.31" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+      <line x1="866.9744" y1="352.7417" x2="866.9744" y2="549.48" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+      <line x1="1163.9009" y1="352.7417" x2="1163.9009" y2="549.48" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+      <path d="M1535.0591,627.38c-40.9969,0-74.2316-34.877-74.2316-77.9v-196.7383" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+    </g>
+    <g id="f" data-name="O">
+      <path d="M62.2322,233.6987C105.2513,131.9901,205.9619,60.6242,323.3408,60.6242c116.9384,0,217.3332,70.8311,260.6218,171.9304" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+      <path d="M606.5871,352.721c-4.6078,152.4714-129.6578,274.6589-283.2463,274.6589S44.7034,505.1935,40.0946,352.723" fill="none" stroke="#f2f2f3" stroke-linecap="round" stroke-linejoin="round" stroke-width="80.1892"/>
+    </g>
+  </g>
+</svg>

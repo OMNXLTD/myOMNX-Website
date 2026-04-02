@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 507.59 468.86">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: 20px;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-linecap: round;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-width: 30px;
+      }
+    </style>
+  </defs>
+  <g id="bouncyball">
+    <circle class="cls-3" cx="251.96" cy="237.9" r="168.41"/>
+    <path class="cls-2" d="M137,414.42c-56.93-20.51-87.03-64.1-88.8-132.08"/>
+    <path class="cls-2" d="M369.77,57.02c56.93,20.51,87.03,64.1,88.8,132.08"/>
+    <path class="cls-1" d="M435.41,36.43c35.38,12.75,54.09,39.84,55.19,82.09"/>
+    <path class="cls-1" d="M72.19,425.6c-35.38-12.75-54.09-39.84-55.19-82.09"/>
+  </g>
+</svg>

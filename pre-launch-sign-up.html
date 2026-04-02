@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <title>OMNX — Pre-launch</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
+
+  <link href="css/universal.css" rel="stylesheet" type="text/css" />
+  <link href="assets/favicon.jpg" rel="shortcut icon" type="image/x-icon" />
+  <link href="assets/webclip.jpg" rel="apple-touch-icon" />
+
+  <meta name="description" content="OMNX — Prelaunch Product Trial Sign Up" />
+  <meta property="og:title" content="OMNX — Prelaunch Product Trial Sign Up" />
+  <meta property="og:description" content="OMNX — Prelaunch Product Trial Sign Up" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="OMNX — Prelaunch Product Trial Sign Up" />
+  <meta name="twitter:description" content="OMNX — Prelaunch Product Trial Sign Up" />
+
+  <!-- reCAPTCHA (same as support.html) -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <!-- Canonical (update if you publish a real URL) -->
+  <link rel="canonical" href="https://myomnx.com/pre-launch-sign-up" />
+
+  <!-- Ionicons (you already load this in index.html; keep consistent site-wide) -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <!-- If loading.js is meant to run site-wide, keep it here (cleaner than after </head>) -->
+  <script defer src="js/loading.js"></script>
+</head>
+
+<body class="body">
+  <!-- NAV (injected) -->
+  <div data-include="partials/nav.html"></div>
+
+  <!-- CONTENT -->
+  <main>
+    <section class="section pre-launch">
+      <div class="container section__inner pre-launch">
+        <div class="section-grid section-grid--2">
+          <div class="section-grid-element">
+            <div class="eyebrow secondary">Sign up for early product trial queue, massive discount deals & launch news.</div>
+            <h2 class="heading">Product trial & pre-launch</h2>
+            <p class="subheading">
+              Before OMGO launches publicly in 2026, we’re running a limited pre-launch trial to finalise the product with 
+              real user input — real people who train, move, work, and recover in the real world. Your experience directly 
+              shapes the final feel, features, and performance of OMGO — from vibration strength to usability and comfort. 
+              Trial spots are intentionally capped so feedback can meaningfully influence the final design. 
+              In return, you get early access, exclusive pricing, and a genuine voice in the product before anyone else 
+              touches it. Once the trial closes, we move forward with what we’ve learned from you to launch the final 
+              version of OMGO. If you care about how your recovery tools actually fit into your life, this is your chance 
+              to influence it from day zero.
+            </p>
+            <p class="subheading">
+              We collect your email and a few details like age and occupation to ensure the trial group reflects how OMGO 
+              will actually be used. This allows us to invite participants in phases and keep the process focused. If you 
+              want early access and a real say in what launches, register your interest below. Your information stays private 
+              and is used only for product fit research and trial updates.
+            </p>
+          </div>
+
+          <!-- PRE-LAUNCH SIGNUP FORM -->
+          <div class="section-grid-element">
+            <div class="form-container">
+              <p class="form-status" id="trialStatus" aria-live="polite"></p>
+
+              <iframe name="omnx_gas_iframe" style="display:none;"></iframe>
+
+              <form
+                id="trialForm"
+                class="omnx-website-form"
+                method="POST"
+                target="omnx_gas_iframe"
+                autocomplete="on"
+                data-omnx-form="pre-launch-sign-up"
+              >
+                <!-- <input type="text" name="_hp" value="" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px; opacity:0;"> -->
+                <input
+                  type="text"
+                  name="fax_number"
+                  value=""
+                  tabindex="-1"
+                  autocomplete="new-password"
+                  aria-hidden="true"
+                  inputmode="none"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  style="position:absolute; left:-9999px; opacity:0;"
+                />
+                <input type="hidden" name="formType" value="trial">
+                <input type="hidden" id="trialState" name="state" value="">
+                <input type="hidden" id="trialOrigin" name="origin" value="">
+
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label class="form-label" for="trialEmail">Email address</label>
+                    <input
+                      class="form-input"
+                      id="trialEmail"
+                      name="email"
+                      type="email"
+                      placeholder="name@email.com"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label class="form-label" for="trialName">Preferred name</label>
+                    <input
+                      class="form-input"
+                      id="trialName"
+                      name="preferred_name"
+                      type="text"
+                      placeholder="What should we call you?"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label class="form-label" for="trialLocation">Location</label>
+                    <input
+                      class="form-input"
+                      id="trialLocation"
+                      name="location"
+                      type="text"
+                      placeholder="Where are you based?"
+                      autocomplete="country-name"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label class="form-label" for="trialAge">Age</label>
+                    <input
+                      class="form-input"
+                      id="trialAge"
+                      name="age"
+                      type="number"
+                      inputmode="numeric"
+                      min="13"
+                      max="99"
+                      placeholder="e.g. 27"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label class="form-label" for="trialOccupation">Occupation</label>
+                    <input
+                      class="form-input"
+                      id="trialOccupation"
+                      name="occupation"
+                      type="text"
+                      placeholder="What do you do day-to-day?"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-field">
+                    <label class="form-label" for="trialModel">I am <strong>interested</strong> in:</label>
+                    <select class="form-input" id="trialModel" name="model_interest" required>
+                      <option value="" selected disabled>Select one</option>
+                      <option value="OMGO sphere">OMGO sphere</option>
+                      <option value="OMGO mini">OMGO mini</option>
+                      <option value="ALL">Both</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-field">
+                  <label class="form-label" for="trialHeard">How did you hear about us?</label>
+                  <input
+                    class="form-input"
+                    id="trialHeard"
+                    name="heard_about"
+                    type="text"
+                    placeholder="Instagram, a friend, Reddit, gym, etc."
+                    required
+                  />
+                </div>
+
+                <div class="form-field">
+                  <label class="form-label" for="trialWhy">
+                    Why are you interested in participating? <span class="form-optional">(optional)</span>
+                  </label>
+                  <textarea
+                    class="form-input"
+                    id="trialWhy"
+                    name="why_interested"
+                    rows="4"
+                    placeholder="A few words describing your reasons..."
+                  ></textarea>
+                </div>
+
+                <p class="policy">
+                  This site is protected by reCAPTCHA and the Google
+                  <a class="policy-link" href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a>
+                  and
+                  <a class="policy-link" href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms of Service</a>
+                  apply.
+                </p>
+
+                <!-- reCAPTCHA widget (same sitekey as support.html) -->
+                <div class="form-row">
+                  <div class="g-recaptcha" data-sitekey="6LeXEhwsAAAAAOHeFviGvoenrkE4uQ79H53WCod-"></div>
+                </div>
+
+                <label class="form-consent">
+                  <input class="form-checkbox" type="checkbox" name="consent" required/>
+                  <span class="form-consent__text">
+                    I agree to be contacted about the OMGO trial and pre-launch updates.
+                  </span>
+                </label>
+
+                <label class="form-consent">
+                  <input class="form-checkbox" type="checkbox" name="email_updates" />
+                  <span class="form-consent__text">Sign me up for email updates too!</span>
+                </label>
+
+                <p class="policy">We’ll use your details for research + (optionally) marketing. See <a class="policy-link" href="privacy-notice.html">Privacy</a> Notice.</p>
+
+                <button class="cta-button cta-button--primary" type="submit" id="trialSubmit">
+                  Join the trial queue
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER (injected) -->
+  <div data-include="partials/footer.html"></div>
+
+  <!-- Scripts: IMPORTANT ORDER -->
+  <script defer src="js/script.js"></script>
+  <script defer src="js/partials.js"></script>
+</body>
+</html>
