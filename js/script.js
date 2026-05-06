@@ -15,618 +15,1256 @@
 
 
 
+// ================= FLOATING MVP TAB BAR =================
+(() => {
+  if (window.__OMNX_FLOATING_TAB_BAR_INIT) return;
+  window.__OMNX_FLOATING_TAB_BAR_INIT = true;
 
-// NAV
+  function ensureFloatingTabGlassFilter() {
+    if (document.getElementById("omnx-floating-glass-svg")) return;
 
-// ================= MEGA MENU =================
-(function initMegaHoverDownOnly() {
-  // Disable on mobile
-  if (window.innerWidth < 1080) return;
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("id", "omnx-floating-glass-svg");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
 
-  const MAX_TRIES = 40;
-  let tries = 0;
+    svg.style.position = "absolute";
+    svg.style.width = "0";
+    svg.style.height = "0";
+    svg.style.overflow = "hidden";
+    svg.style.pointerEvents = "none";
 
-  const trySetup = () => {
-    const toggle = document.querySelector('.dropdown-toggle');   // the OMGO tab button
-    const panel = document.getElementById('mega-products');     // the dropdown panel
-    const navBar = document.querySelector('.nav_container');     // the fixed navbar
-    const overlay = document.querySelector('.mega-overlay');      // optional blur layer (we won't use to close)
+    svg.innerHTML = `
+      <filter
+        id="omnx-floating-tab-lens"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        filterUnits="objectBoundingBox"
+      >
+        <feComponentTransfer in="SourceAlpha" result="alpha">
+          <feFuncA type="identity" />
+        </feComponentTransfer>
 
-    if (!toggle || !panel || !navBar) {
-      if (tries++ < MAX_TRIES) return void setTimeout(trySetup, 50);
+        <feGaussianBlur
+          in="alpha"
+          stdDeviation="28"
+          result="blur"
+        />
+
+        <feDisplacementMap
+          in="SourceGraphic"
+          in2="blur"
+          scale="22"
+          xChannelSelector="A"
+          yChannelSelector="A"
+        />
+      </filter>
+    `;
+
+    document.body.appendChild(svg);
+  }
+
+  ensureFloatingTabGlassFilter();
+
+  const path = window.location.pathname.split("/").pop() || "index.html";
+
+  const isHome =
+    path === "" ||
+    path === "index.html" ||
+    path === "/";
+
+  const isPrelaunch = path === "pre-launch-sign-up.html";
+  const isContact = path === "support.html";
+
+  let items = [];
+
+  if (isHome) {
+    items = [
+      {
+        label: "Pre-launch",
+        href: "pre-launch-sign-up.html",
+        key: "prelaunch",
+      },
+      {
+        label: "Contact us",
+        href: "support.html",
+        key: "support",
+      },
+    ];
+  } else if (isPrelaunch) {
+    items = [
+      {
+        label: "OMNX Home",
+        href: "index.html",
+        key: "home",
+      },
+      {
+        label: "Contact us",
+        href: "support.html",
+        key: "support",
+      },
+    ];
+  } else if (isContact) {
+    items = [
+      {
+        label: "OMNX Home",
+        href: "index.html",
+        key: "home",
+      },
+      {
+        label: "Pre-launch",
+        href: "pre-launch-sign-up.html",
+        key: "prelaunch",
+      },
+    ];
+  } else {
+    items = [
+      {
+        label: "OMNX Home",
+        href: "index.html",
+        key: "home",
+      },
+      {
+        label: "Pre-launch",
+        href: "pre-launch-sign-up.html",
+        key: "prelaunch",
+      },
+    ];
+  }
+
+  const nav = document.createElement("nav");
+  nav.id = "omnxFloatingTabs";
+  nav.className = "floating-tab-bar";
+  nav.setAttribute("aria-label", "OMNX quick navigation");
+
+  nav.innerHTML = `
+    <div class="floating-tab-bar__inner">
+      <div class="floating-tab-bar__filter" aria-hidden="true"></div>
+      <div class="floating-tab-bar__overlay" aria-hidden="true"></div>
+      <div class="floating-tab-bar__specular" aria-hidden="true"></div>
+
+      <div class="floating-tab-bar__content">
+        ${items
+          .map(
+            (item) => `
+              <a class="floating-tab-bar__link" data-tab="${item.key}" href="${item.href}">
+                <span>${item.label}</span>
+              </a>
+            `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(nav);
+
+  requestAnimationFrame(() => {
+    nav.classList.add("is-visible");
+  });
+})();
+
+
+
+// ================= OMNX GENERIC ARTICLE MODALS =================
+(() => {
+  if (window.__OMNX_GENERIC_MODAL_INIT) return;
+  window.__OMNX_GENERIC_MODAL_INIT = true;
+
+  const openButtons = document.querySelectorAll("[data-omnx-modal-open]");
+  const modals = document.querySelectorAll("[data-omnx-modal]");
+
+  if (!openButtons.length || !modals.length) return;
+
+  let lastFocusedElement = null;
+  let activeModal = null;
+
+  function getModalByName(name) {
+    return document.querySelector(`[data-omnx-modal="${CSS.escape(name)}"]`);
+  }
+
+  function openOMNXModal(modal) {
+    if (!modal) return;
+
+    lastFocusedElement = document.activeElement;
+    activeModal = modal;
+
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("omnx-modal-open");
+
+    const closeButton = modal.querySelector(".omnx-modal__close");
+    if (closeButton) closeButton.focus();
+  }
+
+  function closeOMNXModal(modal = activeModal) {
+    if (!modal) return;
+
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+
+    const stillOpen = document.querySelector(".omnx-modal.is-open");
+    if (!stillOpen) {
+      document.body.classList.remove("omnx-modal-open");
+      activeModal = null;
+    }
+
+    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+      lastFocusedElement.focus();
+    }
+  }
+
+  openButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const modalName = button.getAttribute("data-omnx-modal-open");
+      const modal = getModalByName(modalName);
+      openOMNXModal(modal);
+    });
+  });
+
+  modals.forEach((modal) => {
+    const closeButtons = modal.querySelectorAll("[data-omnx-modal-close]");
+
+    closeButtons.forEach((button) => {
+      button.addEventListener("click", () => closeOMNXModal(modal));
+    });
+
+    modal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-omnx-modal-close]")) {
+        closeOMNXModal(modal);
+      }
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && activeModal) {
+      closeOMNXModal(activeModal);
+    }
+  });
+})();
+
+// // ============== INFINITE GALLERY: CINEMATIC REVEAL (ON ENTER) ==============
+// (() => {
+//     const sections = Array.from(document.querySelectorAll("[data-ig-reveal]"));
+//     if (!sections.length) return;
+
+//     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+//     function prepareSection(section) {
+//         // Prevent double init
+//         if (section.__igRevealInit) return;
+//         section.__igRevealInit = true;
+
+//         // Mark ready (so CSS can safely apply without weird flashes)
+//         section.classList.add("ig-reveal-ready");
+
+//         // Optional: set stagger indices for items/images inside this section
+//         // Prefer explicit items if you add them; fallback to common patterns, then images.
+//         const items = section.querySelectorAll(
+//             "[data-ig-item], .ig__item, .infinite-gallery__item, img"
+//         );
+
+//         // Only stagger the first “screenful” to avoid huge delays if you have many images
+//         const maxStagger = 18;
+//         Array.from(items).slice(0, maxStagger).forEach((el, i) => {
+//             el.style.setProperty("--ig-i", String(i));
+//         });
+
+//         // If reduced motion: reveal immediately
+//         if (reduceMotion) {
+//             section.classList.add("is-revealed");
+//             return;
+//         }
+
+//         let revealed = false;
+//         const reveal = () => {
+//             if (revealed) return;
+//             revealed = true;
+//             section.classList.add("is-revealed");
+//         };
+
+//         if (!("IntersectionObserver" in window)) {
+//             reveal();
+//             return;
+//         }
+
+//         const io = new IntersectionObserver(
+//             (entries) => {
+//                 const on = entries.some((e) => e.isIntersecting);
+//                 if (!on) return;
+//                 reveal();
+//                 io.disconnect();
+//             },
+//             {
+//                 // Feel more “cinematic”: trigger slightly after it starts entering
+//                 threshold: 0.18,
+//                 rootMargin: "-10% 0px -10% 0px",
+//             }
+//         );
+
+//         io.observe(section);
+//     }
+
+//     // Init now
+//     sections.forEach(prepareSection);
+
+//     // If you inject partials later
+//     window.addEventListener("partials:loaded", () => {
+//         document.querySelectorAll("[data-ig-reveal]").forEach(prepareSection);
+//     });
+// })();
+
+// /* ===================== INFINITE GALLERY (true loop + directional buttons, no bounce) ===================== */
+// (() => {
+//     const root = document.querySelector("[data-ig]");
+//     if (!root || root.__ig_init) return;
+//     root.__ig_init = true;
+
+//     const scroller = root.querySelector("[data-ig-scroller]");
+//     const track = root.querySelector("[data-ig-track]");
+//     const prevBtn = root.querySelector("[data-ig-prev]");
+//     const nextBtn = root.querySelector("[data-ig-next]");
+//     if (!scroller || !track) return;
+
+//     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+//     // ========= EDIT THIS LIST (add/remove freely) =========
+//     const IG_IMAGES = [
+//         { src: "assets/about-page-gallery-photo-1.webp", alt: "OMGO in daily life – 1" },
+//         { src: "assets/about-page-gallery-photo-2.webp", alt: "OMGO in daily life – 2" },
+//         { src: "assets/about-page-gallery-photo-3.webp", alt: "OMGO in daily life – 3" },
+//         { src: "assets/about-page-gallery-photo-4.webp", alt: "OMGO in daily life – 4" },
+//         { src: "assets/about-page-gallery-photo-5.webp", alt: "OMGO in daily life – 5" },
+//         { src: "assets/about-page-gallery-photo-6.webp", alt: "OMGO in daily life – 6" },
+//     ];
+//     // ======================================================
+
+//     const N = IG_IMAGES.length;
+//     if (N < 2) return;
+
+//     const mod = (x, m) => ((x % m) + m) % m;
+
+//     const makeItem = ({ src, alt }, i, ariaHidden) => {
+//         const item = document.createElement("div");
+//         item.className = "ig__item";
+//         if (ariaHidden) item.setAttribute("aria-hidden", "true");
+
+//         const img = document.createElement("img");
+//         img.src = src;
+//         img.alt = alt || `OMGO in daily life – ${i + 1}`;
+//         img.loading = "lazy";
+//         img.decoding = "async";
+
+//         item.appendChild(img);
+//         return item;
+//     };
+
+//     // Build 3 sets: [before] [middle] [after]
+//     track.innerHTML = "";
+//     IG_IMAGES.forEach((d, i) => track.appendChild(makeItem(d, i, true)));
+//     IG_IMAGES.forEach((d, i) => track.appendChild(makeItem(d, i, false)));
+//     IG_IMAGES.forEach((d, i) => track.appendChild(makeItem(d, i, true)));
+
+//     // Measurements derived from middle set
+//     let base = 0;       // width of one set; also scrollLeft at start of middle set
+//     let offsets = [];   // offsets of each tile inside a set
+//     let ready = false;
+
+//     const measure = () => {
+//         const kids = Array.from(track.children);
+//         if (kids.length < 3 * N) return false;
+
+//         const middle = kids.slice(N, 2 * N);
+//         if (!middle[0]) return false;
+
+//         base = middle[0].offsetLeft; // == width of one full set
+//         const baseLeft = base;
+//         offsets = middle.map(el => el.offsetLeft - baseLeft);
+
+//         ready = base > 0 && offsets.length === N;
+//         return ready;
+//     };
+
+//     // Teleport instantly (no animation)
+//     const teleportTo = (left) => {
+//         const prev = scroller.style.scrollBehavior;
+//         scroller.style.scrollBehavior = "auto";
+//         scroller.scrollLeft = left;
+//         scroller.style.scrollBehavior = prev || "";
+//     };
+
+//     // Which “set” are we currently in? 0=before, 1=middle, 2=after
+//     const currentSet = () => {
+//         if (!ready) return 1;
+//         return Math.floor(scroller.scrollLeft / base);
+//     };
+
+//     // Position within current set [0..base)
+//     const withinSet = () => {
+//         if (!ready) return 0;
+//         const s = currentSet();
+//         return scroller.scrollLeft - s * base;
+//     };
+
+//     // Nearest tile index inside a set
+//     const nearestIndex = (within) => {
+//         let bestI = 0;
+//         let bestD = Infinity;
+//         for (let i = 0; i < offsets.length; i++) {
+//             const d = Math.abs(within - offsets[i]);
+//             if (d < bestD) {
+//                 bestD = d;
+//                 bestI = i;
+//             }
+//         }
+//         return bestI;
+//     };
+
+//     // Recenter logic:
+//     // - Manual scroll: wrap immediately so it feels infinite
+//     // - Programmatic scroll: wait until motion settles, then recenter (avoid mid-animation teleport)
+//     let isProgrammatic = false;
+//     let settleTimer = null;
+
+//     const recenterAfterSettle = () => {
+//         if (!ready) return;
+//         const s = currentSet();
+//         if (s === 1) return;
+
+//         // Preserve exact within-set position
+//         const within = withinSet();
+//         teleportTo(base + within);
+//     };
+
+//     const scheduleSettle = () => {
+//         clearTimeout(settleTimer);
+//         settleTimer = setTimeout(() => {
+//             // After scrolling stops (manual or programmatic), recenter invisibly.
+//             recenterAfterSettle();
+//             isProgrammatic = false;
+//         }, 140);
+//     };
+
+//     scroller.addEventListener("scroll", () => {
+//         if (!ready) return;
+//         // Never teleport mid-gesture. Always recenter only after scroll settles.
+//         scheduleSettle();
+//     }, { passive: true });
+
+//     const scrollToLeft = (left, behavior = "smooth") => {
+//         scroller.scrollTo({
+//             left,
+//             behavior: reduceMotion ? "auto" : behavior,
+//         });
+//     };
+
+//     // Directional step that NEVER bounces:
+//     // - If at last and going right -> go to first tile in NEXT set (keeps moving right)
+//     // - If at first and going left -> go to last tile in PREV set (keeps moving left)
+//     const step = (dir) => {
+//         if (!ready) return;
+
+//         let s = currentSet();
+
+//         // Safety: if somehow we’re outside [0..2], recenter to middle first
+//         if (s < 0 || s > 2) {
+//             teleportTo(base + withinSet());
+//             s = 1;
+//         }
+
+//         const within = withinSet();
+//         const i = nearestIndex(within);
+
+//         let nextI = mod(i + dir, N);
+//         let targetSet = s;
+
+//         if (dir > 0 && i === N - 1) targetSet = s + 1; // keep moving right
+//         if (dir < 0 && i === 0) targetSet = s - 1; // keep moving left
+
+//         // Keep targetSet inside [0..2]. If we’re at the outermost set, teleport to middle first.
+//         if (targetSet < 0 || targetSet > 2) {
+//             // recenter to middle preserving within-set position, then redo step
+//             teleportTo(base + within);
+//             targetSet = 1;
+//             if (dir > 0 && i === N - 1) targetSet = 2;
+//             if (dir < 0 && i === 0) targetSet = 0;
+//         }
+
+//         const left = targetSet * base + offsets[nextI];
+
+//         isProgrammatic = true;
+//         clearTimeout(settleTimer);
+
+//         scrollToLeft(left, "smooth");
+
+//         // If scrollend exists, use it; otherwise debounce settle
+//         if ("onscrollend" in window) {
+//             const onEnd = () => {
+//                 scroller.removeEventListener("scrollend", onEnd);
+//                 recenterAfterSettle();
+//                 isProgrammatic = false;
+//             };
+//             scroller.addEventListener("scrollend", onEnd, { once: true });
+//         } else {
+//             scheduleSettle();
+//         }
+//     };
+
+//     prevBtn?.addEventListener("click", () => step(-1));
+//     nextBtn?.addEventListener("click", () => step(1));
+
+//     scroller.addEventListener("keydown", (e) => {
+//         if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+//         if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+//     });
+
+//     // Init after layout settles
+//     const init = () => {
+//         if (!measure()) return;
+//         // Start at first tile of the middle set
+//         teleportTo(base + offsets[0]);
+//     };
+
+//     requestAnimationFrame(() => {
+//         init();
+
+//         // Re-measure once after images load (handles late layout shifts)
+//         let did = false;
+//         track.addEventListener("load", () => {
+//             if (did) return;
+//             did = true;
+//             const i = ready ? nearestIndex(withinSet()) : 0;
+//             measure();
+//             teleportTo(base + (offsets[i] ?? 0));
+//         }, true);
+//     });
+
+//     // Resize: keep the same index
+//     let resizeTimer = null;
+//     window.addEventListener("resize", () => {
+//         clearTimeout(resizeTimer);
+//         resizeTimer = setTimeout(() => {
+//             if (!ready) return;
+//             const i = nearestIndex(withinSet());
+//             measure();
+//             teleportTo(base + (offsets[i] ?? 0));
+//         }, 120);
+//     });
+// })();
+
+// ============== WORD SEQUENCING ANIMATION ==============
+document.addEventListener("DOMContentLoaded", () => {
+    const block = document.querySelector(".whiten-seq");
+    if (!block) return;
+
+    // Split into spans
+    const words = block.innerText.trim().split(" ");
+    block.innerHTML = words
+        .map(w => `<span class="whiten-word">${w}</span>`)
+        .join(" ");
+
+    const spans = [...block.querySelectorAll(".whiten-word")];
+
+    let isAnimating = false;
+    let observerStarted = false;
+
+    function runSequence() {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        // reset all
+        spans.forEach(s => s.classList.remove("active"));
+
+        let i = 0;
+        function step() {
+            if (i < spans.length) {
+                spans[i].classList.add("active");
+                i++;
+                setTimeout(step, 150); // reading speed pacing
+            } else {
+                // Finished → wait 8 sec → restart if still visible
+                setTimeout(() => {
+                    isAnimating = false;
+                    if (observerStarted) runSequence();
+                }, 8000);
+            }
+        }
+        step();
+    }
+
+    // Observe when at least 50% of this block is on screen
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                if (!observerStarted) {
+                    observerStarted = true;
+                    runSequence();
+                }
+            } else {
+                observerStarted = false;
+            }
+        });
+    }, { threshold: 0.5 });
+
+    io.observe(block);
+});
+
+// ============== PRODUCT TEXTURE BANNER: PARALLAX ==============
+(() => {
+  const init = () => {
+    const section = document.querySelector(".product-texture-banner");
+    if (!section) return;
+
+    const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    if (mq?.matches) return;
+
+    const MAX_PX = 90;
+    const clamp01 = (v) => Math.max(0, Math.min(1, v));
+
+    let ticking = false;
+    let active = true;
+
+    const update = () => {
+      ticking = false;
+      if (!active) return;
+
+      const rect = section.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+
+      const progress = clamp01((vh - rect.top) / (vh + rect.height));
+      const y = (progress - 0.5) * 2 * MAX_PX;
+
+      section.style.setProperty(
+        "--product-banner-parallax-px",
+        `${y.toFixed(2)}px`
+      );
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          active = entries.some((entry) => entry.isIntersecting);
+          if (active) onScroll();
+        },
+        {
+          rootMargin: "260px 0px 260px 0px",
+          threshold: 0.01,
+        }
+      );
+
+      io.observe(section);
+    }
+
+    update();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    window.visualViewport?.addEventListener("resize", onScroll, { passive: true });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
+
+// ============== SECTION 5: BEFORE / AFTER AUTO-SWEEP SLIDER ==============
+(() => {
+  const init = () => {
+    const slider = document.querySelector("[data-before-after]");
+    if (!slider || slider.__beforeAfterInit) return;
+
+    slider.__beforeAfterInit = true;
+
+    const stage = slider.querySelector(".before-after-slider__stage");
+    const handle = slider.querySelector(".before-after-slider__handle");
+    const images = Array.from(slider.querySelectorAll("img"));
+
+    if (!stage || !handle) return;
+
+    const prefersReducedMotion =
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    let hasPlayedIntro = false;
+    let isDragging = false;
+    let isInteractive = false;
+    let activePointerId = null;
+
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+    const setPos = (percent) => {
+      const safe = clamp(percent, 0, 100);
+      slider.style.setProperty("--ba-pos", `${safe.toFixed(2)}%`);
+    };
+
+    /*
+      Important:
+      Set this immediately so the section never appears in a confusing half-state.
+      100% = full left/before image.
+    */
+    setPos(100);
+
+    const getPercentFromClientX = (clientX) => {
+      const rect = stage.getBoundingClientRect();
+      if (!rect.width) return 100;
+      return ((clientX - rect.left) / rect.width) * 100;
+    };
+
+    const waitForImages = async () => {
+      const jobs = images.map((img) => {
+        if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+
+        if (typeof img.decode === "function") {
+          return img.decode().catch(() => {});
+        }
+
+        return new Promise((resolve) => {
+          img.addEventListener("load", resolve, { once: true });
+          img.addEventListener("error", resolve, { once: true });
+        });
+      });
+
+      await Promise.all(jobs);
+    };
+
+    const animateTo = (target, duration = 1200, easing = easeInOutCubic) => {
+      return new Promise((resolve) => {
+        const startRaw = getComputedStyle(slider).getPropertyValue("--ba-pos").trim();
+        const parsedStart = parseFloat(startRaw);
+        const start = Number.isFinite(parsedStart) ? parsedStart : 100;
+        const delta = target - start;
+        const startedAt = performance.now();
+
+        const tick = (now) => {
+          const elapsed = now - startedAt;
+          const t = clamp(elapsed / duration, 0, 1);
+          const eased = easing(t);
+
+          setPos(start + delta * eased);
+
+          if (t < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            setPos(target);
+            resolve();
+          }
+        };
+
+        requestAnimationFrame(tick);
+      });
+    };
+
+    function easeInOutCubic(t) {
+      return t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+    const playIntro = async () => {
+      if (hasPlayedIntro) return;
+      hasPlayedIntro = true;
+
+      /*
+        Wait until the images are actually decoded.
+        This prevents the visual from appearing out of the blue mid-animation.
+      */
+      await waitForImages();
+
+      if (prefersReducedMotion) {
+        setPos(32);
+        isInteractive = true;
+        slider.classList.add("is-draggable");
+        return;
+      }
+
+      isInteractive = false;
+      slider.classList.remove("is-draggable");
+
+      /*
+        Timeline:
+        1. Start at 100% = full left/before image.
+        2. Sweep left to 0% = full right/after image.
+        3. Hold.
+        4. Return to 32%, then user can drag.
+      */
+      setPos(100);
+
+      await wait(520);
+      await animateTo(0, 2200, easeInOutCubic);
+      await wait(3000);
+      await animateTo(32, 1150, easeInOutCubic);
+
+      isInteractive = true;
+      slider.classList.add("is-draggable");
+    };
+
+    const startDrag = (event) => {
+      if (!isInteractive) return;
+
+      isDragging = true;
+      activePointerId = event.pointerId;
+
+      stage.setPointerCapture?.(activePointerId);
+      slider.classList.add("is-dragging");
+
+      setPos(getPercentFromClientX(event.clientX));
+      event.preventDefault();
+    };
+
+    const moveDrag = (event) => {
+      if (!isDragging || event.pointerId !== activePointerId) return;
+      setPos(getPercentFromClientX(event.clientX));
+    };
+
+    const stopDrag = (event) => {
+      if (!isDragging || event.pointerId !== activePointerId) return;
+
+      isDragging = false;
+      activePointerId = null;
+
+      slider.classList.remove("is-dragging");
+      stage.releasePointerCapture?.(event.pointerId);
+    };
+
+    stage.addEventListener("pointerdown", startDrag);
+    stage.addEventListener("pointermove", moveDrag);
+    stage.addEventListener("pointerup", stopDrag);
+    stage.addEventListener("pointercancel", stopDrag);
+
+    stage.addEventListener("lostpointercapture", () => {
+      isDragging = false;
+      activePointerId = null;
+      slider.classList.remove("is-dragging");
+    });
+
+    handle.addEventListener("keydown", (event) => {
+      if (!isInteractive) return;
+
+      const currentRaw = getComputedStyle(slider).getPropertyValue("--ba-pos").trim();
+      const current = parseFloat(currentRaw) || 32;
+
+      if (event.key === "ArrowLeft") {
+        setPos(current - 4);
+        event.preventDefault();
+      }
+
+      if (event.key === "ArrowRight") {
+        setPos(current + 4);
+        event.preventDefault();
+      }
+    });
+
+    /*
+      Start later:
+      Observe the slider itself, not the whole section.
+      This means the text can enter first, then the visual starts once the
+      user has properly reached the comparison image.
+    */
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (!entry?.isIntersecting) return;
+
+          playIntro();
+          io.disconnect();
+        },
+        {
+          threshold: 0.72,
+          rootMargin: "-6% 0px -10% 0px",
+        }
+      );
+
+      io.observe(slider);
+    } else {
+      playIntro();
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
+
+// ============== HOW SECTION: BACKGROUND PARALLAX ==============
+(() => {
+    const init = () => {
+        const section = document.querySelector(".section--how");
+        if (!section) return;
+
+        const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+        if (mq?.matches) return;
+
+        const MAX_PX = 200;
+        const clamp01 = (v) => Math.max(0, Math.min(1, v));
+        let ticking = false;
+        let active = true;
+
+        const update = () => {
+            ticking = false;
+            if (!active) return;
+
+            const rect = section.getBoundingClientRect();
+            const vh = window.innerHeight || document.documentElement.clientHeight;
+
+            const p = clamp01((vh - rect.top) / (vh + rect.height));
+            const y = (p - 0.5) * 2 * MAX_PX; // [-MAX_PX .. +MAX_PX]
+
+            section.style.setProperty("--how-parallax-px", `${y.toFixed(2)}px`);
+        };
+
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(update);
+        };
+
+        if ("IntersectionObserver" in window) {
+            const io = new IntersectionObserver(
+                (entries) => {
+                    active = entries.some((e) => e.isIntersecting);
+                    if (active) onScroll();
+                },
+                { rootMargin: "300px 0px 300px 0px", threshold: 0.01 }
+            );
+            io.observe(section);
+        }
+
+        update();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll, { passive: true });
+        window.visualViewport?.addEventListener("resize", onScroll, { passive: true });
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init, { once: true });
+    } else {
+        init();
+    }
+})();
+
+// ============== HOW SECTION: PAGE-FLIP BACKGROUND (tech drawing pages) ==============
+(() => {
+    const section = document.querySelector(".section--how");
+    if (!section) return;
+
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    const IMAGES = [
+        "../assets/omgo-tech-drawing-page-1.webp",
+        "../assets/omgo-tech-drawing-page-2.webp",
+        "../assets/omgo-tech-drawing-page-3.webp",
+    ];
+
+    const LOOP_MS = 6000;          // change every 6000ms (as requested)
+    const XFADE_MS = 2000;         // cinematic fade time
+    const INTRO_STEP_MS = 180;     // quick flashes on entry
+    const INTRO_STEPS = 10;        // how many flashes total
+
+    // ------------------ BG layers ------------------
+    let bg = section.querySelector(".how-bg");
+    if (!bg) {
+        bg = document.createElement("div");
+        bg.className = "how-bg";
+        bg.innerHTML = `
+      <div class="how-bg__page how-bg__a"></div>
+      <div class="how-bg__page how-bg__b"></div>
+    `;
+        section.insertBefore(bg, section.firstChild);
+        section.classList.add("how-bg-ready");
+    }
+
+    const a = bg.querySelector(".how-bg__a");
+    const b = bg.querySelector(".how-bg__b");
+
+    const setBg = (el, url) => { el.style.backgroundImage = `url("${url}")`; };
+
+    const preload = (url) =>
+        new Promise((res) => {
+            const img = new Image();
+            img.onload = () => res(true);
+            img.onerror = () => res(false);
+            img.src = url;
+        });
+
+    let idx = 0;
+    let topIsA = true;
+    let loopTimer = null;
+
+    // state flags
+    let isVisible = false;
+    let startedOnce = false;
+    let flashing = false;
+
+    function stopLoop() {
+        if (loopTimer) clearInterval(loopTimer);
+        loopTimer = null;
+    }
+
+    function startLoop() {
+        stopLoop();
+        loopTimer = setInterval(() => {
+            swapTo((idx + 1) % IMAGES.length, { blurPx: 0 });
+        }, LOOP_MS);
+    }
+
+    function setCinematicVars({ blurPx = 0, scale = 1.02, scaleMs = 1800 } = {}) {
+        section.style.setProperty("--how-xfade-ms", `${XFADE_MS}ms`);
+        section.style.setProperty("--how-blur", `${blurPx}px`);
+        section.style.setProperty("--how-scale", `${scale}`);
+        section.style.setProperty("--how-scale-ms", `${scaleMs}ms`);
+    }
+
+    function swapTo(nextIdx, { blurPx = 0 } = {}) {
+        if (!isVisible) return;
+
+        if (reduceMotion) {
+            idx = nextIdx;
+            setBg(a, IMAGES[idx]);
+            a.classList.add("is-active");
+            b.classList.remove("is-active");
+            return;
+        }
+
+        const incoming = topIsA ? b : a;
+        const outgoing = topIsA ? a : b;
+
+        setCinematicVars({ blurPx, scale: 1.02 });
+
+        idx = nextIdx;
+        setBg(incoming, IMAGES[idx]);
+
+        // kick transition
+        section.classList.add("is-xfading");
+        incoming.classList.add("is-active");
+        outgoing.classList.remove("is-active");
+
+        window.setTimeout(() => {
+            section.classList.remove("is-xfading");
+            topIsA = !topIsA;
+            setCinematicVars({ blurPx: 0, scale: 1.02 });
+        }, XFADE_MS + 40);
+    }
+
+    async function introFlash() {
+        if (reduceMotion || flashing) return;
+        flashing = true;
+
+        let flashIdx = 0;
+
+        for (let i = 0; i < INTRO_STEPS; i++) {
+            if (!isVisible) break; // if user scrolls away, stop
+
+            const t = i / (INTRO_STEPS - 1);
+            const blur = Math.max(0, Math.round(18 * (1 - t)));
+            const next = flashIdx % IMAGES.length;
+
+            section.style.setProperty("--how-xfade-ms", `${Math.min(260, XFADE_MS)}ms`);
+            swapTo(next, { blurPx: blur });
+
+            flashIdx++;
+            await new Promise((r) => setTimeout(r, INTRO_STEP_MS));
+        }
+
+        // land on page 1
+        if (isVisible) {
+            section.style.setProperty("--how-xfade-ms", `${Math.min(420, XFADE_MS)}ms`);
+            swapTo(0, { blurPx: 0 });
+            await new Promise((r) => setTimeout(r, Math.min(520, XFADE_MS)));
+            section.style.setProperty("--how-xfade-ms", `${XFADE_MS}ms`);
+        }
+
+        flashing = false;
+    }
+
+    // ------------------ Content cinematic reveal ------------------
+    function revealContent() {
+        // add a class so CSS runs blur/opacity/translate reveal
+        section.classList.add("how-content-in");
+    }
+
+    // ------------------ Boot once, but only when entering ------------------
+    async function bootOnce() {
+        if (startedOnce) return;
+        startedOnce = true;
+
+        await Promise.all(IMAGES.map(preload));
+
+        // start from page 1 visible (no flashing yet)
+        idx = 0;
+        setBg(a, IMAGES[idx]);
+        a.classList.add("is-active");
+        b.classList.remove("is-active");
+        topIsA = true;
+
+        // when user first enters: reveal content + play intro + start loop
+        revealContent();
+        await introFlash();
+        if (isVisible) startLoop();
+    }
+
+    // ------------------ Visibility control ------------------
+    function onEnter() {
+        isVisible = true;
+
+        // first time: boot + intro
+        bootOnce();
+
+        // later re-entries: just restart loop (don’t replay intro)
+        if (startedOnce && !loopTimer && !reduceMotion) startLoop();
+        if (startedOnce && reduceMotion && !loopTimer) startLoop();
+    }
+
+    function onLeave() {
+        isVisible = false;
+        stopLoop();
+    }
+
+    if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver(
+            (entries) => {
+                const on = entries.some((e) => e.isIntersecting);
+                if (on) onEnter();
+                else onLeave();
+            },
+            { rootMargin: "-30% 0px -30% 0px", threshold: 0.14 }
+        );
+        io.observe(section);
+    } else {
+        // fallback: start immediately if no IO
+        isVisible = true;
+        bootOnce();
+    }
+})();
+
+// ============== FINAL CTA: ONE-TIME LIQUID GLASS WOBBLE ==============
+(() => {
+  const init = () => {
+    const section = document.querySelector(".final-cta");
+    if (!section || section.__finalCtaLiquidInit) return;
+
+    section.__finalCtaLiquidInit = true;
+
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (reduceMotion) return;
+
+    let hasPlayed = false;
+
+    const playLiquidWobble = () => {
+      if (hasPlayed) return;
+      hasPlayed = true;
+
+      // Restart-safe: remove then re-add the class.
+      section.classList.remove("is-liquid-active");
+
+      requestAnimationFrame(() => {
+        section.classList.add("is-liquid-active");
+      });
+
+      // Clean up after animation so hover/normal transforms stay predictable.
+      window.setTimeout(() => {
+        section.classList.remove("is-liquid-active");
+      }, 1200);
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      playLiquidWobble();
       return;
     }
 
-    // Make sure overlay doesn't interfere with the "below-only" behavior
-    if (overlay) overlay.hidden = true;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry?.isIntersecting) return;
 
-    const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
-
-    const addAnim = (state) => {
-      panel.classList.remove('anim-in', 'anim-out');
-      if (state === 'out') panel.hidden = false; // let fade-out play
-      panel.classList.add(state === 'in' ? 'anim-in' : 'anim-out');
-    };
-
-    const open = () => {
-      if (isOpen()) return;
-      toggle.setAttribute('aria-expanded', 'true');
-      panel.hidden = false;
-      addAnim('in');
-    };
-
-    const close = () => {
-      if (!isOpen()) return;
-      toggle.setAttribute('aria-expanded', 'false');
-      addAnim('out');
-      panel.addEventListener('animationend', () => {
-        if (!isOpen()) panel.hidden = true;
-      }, { once: true });
-    };
-
-    // Open ONLY when hovering the OMGO tab
-    toggle.addEventListener('pointerenter', open);
-
-    // Keep open while pointer is over navbar or panel — do nothing here.
-    // We only close via a global pointermove check (downwards exit).
-
-    // Helper: combined bottom edge (viewport Y) of nav + panel
-    const getCombinedBottom = () => {
-      const navB = navBar.getBoundingClientRect().bottom;
-      const pnlB = panel.hidden ? navB : panel.getBoundingClientRect().bottom;
-      return Math.max(navB, pnlB);
-    };
-
-    // Close only when the pointer moves BELOW that combined bottom edge
-    let rafId = null;
-    const onPointerMove = (e) => {
-      if (!isOpen()) return;
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        const combinedBottom = getCombinedBottom();
-        const y = e.clientY;
-        // a tiny tolerance to ignore sub-pixel jitter
-        if (y > combinedBottom + 2) {
-          close();
-        }
-      });
-    };
-
-    // Listen at the document level so it works anywhere on the page
-    document.addEventListener('pointermove', onPointerMove, { passive: true });
-
-    // Prevent click from toggling
-    // toggle.addEventListener('click', (e) => e.preventDefault());
-    toggle.addEventListener("click", (e) => {
-      const url = toggle.getAttribute("data-href") || "omgo.html";
-      // Support ctrl/cmd click = open in new tab (since this is a <button>, we implement it)
-      if (e.metaKey || e.ctrlKey) {
-        window.open(url, "_blank", "noopener");
-        return;
+        playLiquidWobble();
+        io.disconnect();
+      },
+      {
+        threshold: 0.42,
+        rootMargin: "0px 0px -8% 0px",
       }
-      window.location.href = url;
-    });
+    );
 
-    // (Optional) keyboard a11y: uncomment to allow ESC close
-    // document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    io.observe(section);
   };
 
-  trySetup();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
 })();
 
-// ================= MOBILE NAV =================
-function setupMobileNav() {
-  const toggle = document.querySelector(".mobile-nav-toggle");
-  const mobileMenu = document.querySelector(".mobile-menu");
-  const closeBtn = document.querySelector(".mobile-menu-close");
-
-  if (!toggle || !mobileMenu || !closeBtn) {
-    console.warn("[MobileNav] Elements missing — cannot init");
-    return;
-  }
-
-  let startX = 0;
-
-  const openMenu = () => {
-    mobileMenu.hidden = false;
-    requestAnimationFrame(() => mobileMenu.classList.add("open"));
-    toggle.setAttribute("aria-expanded", "true");
-  };
-
-  const closeMenu = () => {
-    mobileMenu.classList.remove("open");
-    toggle.setAttribute("aria-expanded", "false");
-    setTimeout(() => {
-      mobileMenu.hidden = true;
-    }, 350);
-  };
-
-  toggle.onclick = openMenu;
-  closeBtn.onclick = closeMenu;
-
-  // Swipe LEFT to close
-  mobileMenu.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  });
-
-  mobileMenu.addEventListener("touchmove", (e) => {
-    const dx = e.touches[0].clientX - startX;
-    if (dx < -90) closeMenu(); // slide left 90px
-  });
-}
-// Run when partials are injected
-document.addEventListener("partials:loaded", () => {
-  console.log("partials loaded → init mobile nav");
-  setupMobileNav();
-});
-
-
-
-
-// UI
-
-// ============== CARDS REVEAL ANIMATION ==============
+// ============== FINAL CTA: LIQUID PARTICLE BACKDROP REVEAL ==============
 (() => {
-  try {
+  const init = () => {
+    const section = document.querySelector("[data-final-cta-reveal]");
+    if (!section || section.__finalCtaBgRevealInit) return;
+
+    section.__finalCtaBgRevealInit = true;
+
     const prefersReducedMotion =
-      typeof window !== "undefined" &&
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
-    // Prefer any page-specific scroll-restore helper if present (note: top-level const isn't on window).
-    const afterScrollRestore =
-      (typeof __omgoAfterScrollRestore === "function" && __omgoAfterScrollRestore) ||
-      (typeof __cardsAfterScrollRestore === "function" && __cardsAfterScrollRestore) ||
-      (typeof window.__omgoAfterScrollRestore === "function" && window.__omgoAfterScrollRestore) ||
-      (typeof window.__cardsAfterScrollRestore === "function" && window.__cardsAfterScrollRestore) ||
-      ((cb) => cb(window.scrollY || 0));
+    const reveal = () => {
+      section.classList.add("is-bg-revealed");
 
-    const navHeight = () => {
-      const raw = getComputedStyle(document.documentElement)
-        .getPropertyValue("--nav-height")
-        .trim();
-      const v = parseFloat(raw);
-      return Number.isFinite(v) ? v : 0;
+      /*
+        Keep your existing CTA wobble attention effect.
+        If your current JS already adds is-liquid-active, this is harmless.
+      */
+      if (!prefersReducedMotion) {
+        section.classList.add("is-liquid-active");
+      }
     };
 
-    function armCards(section, cardsSelector) {
-      const cards = Array.from(section.querySelectorAll(cardsSelector));
-      cards.forEach((card, i) => {
-        if (!card.hasAttribute("data-reveal-card")) card.setAttribute("data-reveal-card", "");
-        card.style.setProperty("--reveal-i", String(i));
-      });
-      return cards;
+    if (prefersReducedMotion) {
+      reveal();
+      return;
     }
 
-    function revealNoAnim(section) {
-      section.classList.add("reveal-noanim");
-      section.classList.add("is-revealed");
-      requestAnimationFrame(() => section.classList.remove("reveal-noanim"));
-    }
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
 
-    function oneTimeSectionReveal({
-      section,
-      cardsSelector,
-      triggerSelector,
-      rootMargin = "-30% 0px 0% 0px",
-      threshold = 0.12
-    }) {
-      if (!section) return;
-      if (section.__revealArmed) return; // only once
-      section.__revealArmed = true;
-
-      const cards = armCards(section, cardsSelector);
-      if (!cards.length) return;
-
-      const trigger = triggerSelector ? section.querySelector(triggerSelector) : section;
-
-      const doReveal = () => {
-        if (section.__revealed) return;
-        section.__revealed = true;
-
-        requestAnimationFrame(() => {
-          void section.offsetHeight; // reflow barrier
-          requestAnimationFrame(() => section.classList.add("is-revealed"));
-        });
-      };
-
-      afterScrollRestore((y0) => {
-        if (!trigger || !("IntersectionObserver" in window)) {
-          doReveal();
-          return;
-        }
-
-        // If page loads already at/within/below this section -> show instantly (no reveal)
-        const rect0 = trigger.getBoundingClientRect();
-        const triggerDocTop = (window.scrollY || 0) + rect0.top;
-        const snapY = Math.max(0, triggerDocTop - navHeight() - 12);
-        const loadedAbove = y0 < (snapY - 2);
-
-        const hashJump = !!(location.hash && location.hash.length > 1);
-
-        if (prefersReducedMotion || !loadedAbove || hashJump) {
-          section.__revealed = true;
-          revealNoAnim(section);
-          return;
-        }
-
-        const io = new IntersectionObserver(
-          (entries) => {
-            const hit = entries.some((e) => e.isIntersecting || e.intersectionRatio > 0);
-            if (!hit) return;
-            doReveal();
+          if (entry?.isIntersecting && entry.intersectionRatio >= 0.8) {
+            reveal();
             io.disconnect();
-          },
-          { root: null, rootMargin, threshold }
-        );
+          }
+        },
+        {
+          threshold: [0, 0.25, 0.5, 0.8, 1],
+          rootMargin: "0px",
+        }
+      );
 
-        io.observe(trigger);
-      });
+      io.observe(section);
+    } else {
+      reveal();
     }
+  };
 
-    // Showroom cards
-    oneTimeSectionReveal({
-      section: document.querySelector("#omgo-lineup"),
-      cardsSelector: ".showroom-card",
-      triggerSelector: ".showroom__grid",
-      rootMargin: "-30% 0px -25% 0px",
-      threshold: 0.14
-    });
-
-    // Carousel cards
-    document
-      .querySelectorAll("[data-omnx-carousel]")
-      .forEach((carousel) => {
-        const sectionEl = carousel.closest("section") || carousel;
-        oneTimeSectionReveal({
-          section: sectionEl,
-          cardsSelector: "[data-omnx-card], [data-why-card], [data-how-card]",
-          triggerSelector: ".omnx-carousel__navWrap, .why-carousel__navWrap, .how-carousel__navWrap",
-          rootMargin: "-10% 0px 15% 0px",
-          threshold: 0.12,
-        });
-      });
-  } catch (err) {
-    console.warn("[OMNX] reveal disabled:", err);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
   }
 })();
-
-// ============== OMNX-style carousel ==============
-(() => {
-  try {
-    const roots = Array.from(document.querySelectorAll("[data-omnx-carousel]"));
-    if (!roots.length) return;
-
-    // Create/find ONE shared backdrop for the whole page (important)
-    let backdrop =
-      document.querySelector("[data-showroom-backdrop]") ||
-      document.querySelector(".showroom-backdrop.omnx-backdrop");
-
-    if (!backdrop) {
-      backdrop = document.createElement("div");
-      backdrop.className = "showroom-backdrop omnx-backdrop";
-      backdrop.setAttribute("aria-hidden", "true");
-      document.body.appendChild(backdrop);
-    }
-
-    // Global close helper (works across multiple carousels)
-    const closeAnyOpen = () => {
-      const open = document.querySelector(".showroom-card.is-expanded");
-      if (open && typeof open.__howClose === "function") open.__howClose();
-    };
-
-    // Only bind backdrop/ESC once
-    if (!window.__omnxBackdropBound) {
-      window.__omnxBackdropBound = true;
-      backdrop.addEventListener("click", closeAnyOpen);
-      window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeAnyOpen();
-      });
-    }
-    const initCarousel = (root) => {
-      const track = root.querySelector("[data-omnx-track]");
-      const prevBtn = root.querySelector("[data-omnx-prev]");
-      const nextBtn = root.querySelector("[data-omnx-next]");
-      const cards = Array.from(root.querySelectorAll("[data-omnx-card]"));
-
-      if (!track || !prevBtn || !nextBtn || !cards.length) return;
-
-      // -------- carousel navigation --------
-      const getStep = () => {
-        const first = cards[0];
-        if (!first) return 360;
-
-        const cardW = first.getBoundingClientRect().width || 360;
-        const gapRaw = getComputedStyle(track).gap || "24px";
-        const gap = Number.parseFloat(gapRaw) || 24;
-        return cardW + gap;
-      };
-
-      const updateNav = () => {
-        const maxScroll = track.scrollWidth - track.clientWidth;
-        const x = track.scrollLeft;
-        prevBtn.disabled = x <= 2;
-        nextBtn.disabled = x >= (maxScroll - 2);
-      };
-
-      const scrollByCard = (dir) => {
-        track.scrollBy({ left: dir * getStep(), behavior: "smooth" });
-      };
-
-      prevBtn.addEventListener("click", () => scrollByCard(-1));
-      nextBtn.addEventListener("click", () => scrollByCard(1));
-      track.addEventListener("scroll", updateNav, { passive: true });
-
-      track.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowLeft") {
-          e.preventDefault();
-          scrollByCard(-1);
-        } else if (e.key === "ArrowRight") {
-          e.preventDefault();
-          scrollByCard(1);
-        }
-      });
-
-      // -------- modal / expansion (mirrors why-carousel) --------
-      const prefersReducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-
-      const setBackdropOpen = (open) => {
-        backdrop.classList.toggle("is-open", open);
-        backdrop.setAttribute("aria-hidden", open ? "false" : "true");
-      };
-
-      const setRootModalOpen = (open) => {
-        // Use the same convention as the OMGO showroom/why modal (if present).
-        document.documentElement.classList.toggle("showroom-modal-open", open);
-
-        // Prevent layout shift when scrollbar disappears (desktop).
-        if (open) {
-          const scrollBarW = window.innerWidth - document.documentElement.clientWidth;
-          if (scrollBarW > 0) document.documentElement.style.paddingRight = `${scrollBarW}px`;
-        } else {
-          document.documentElement.style.paddingRight = "";
-        }
-      };
-
-      const getExpandedTargetRect = () => {
-        // Match OMGO Mini/Sphere showroom sizing
-        const w = Math.min(980, window.innerWidth * 0.92);
-        const h = Math.min(window.innerHeight * 0.84, 760);
-
-        const width = Math.max(320, Math.round(w));
-        const height = Math.max(420, Math.round(h));
-
-        const left = Math.max(0, Math.round((window.innerWidth - width) / 2));
-        const top = Math.max(0, Math.round((window.innerHeight - height) / 2));
-
-        return { left, top, width, height };
-      };
-
-      const animateTo = (el, rect) => {
-        el.style.left = `${rect.left}px`;
-        el.style.top = `${rect.top}px`;
-        el.style.width = `${rect.width}px`;
-        el.style.height = `${rect.height}px`;
-      };
-
-      const clearInlineGeometry = (el) => {
-        el.style.left = "";
-        el.style.top = "";
-        el.style.width = "";
-        el.style.height = "";
-      };
-
-      const isExpanded = (card) => card.classList.contains("is-expanded");
-
-      const attachExpansion = (card) => {
-        const expandBtn = card.querySelector("[data-expand]");
-        const expandedPanel = card.querySelector(".showroom-card__expanded");
-        const expandedTop = card.querySelector(".showroom-card__expandedTop");
-
-        if (!expandBtn || !expandedPanel || !expandedTop) return;
-
-        // We'll move the media into the expandedTop while open (exactly like why-carousel).
-        const media = card.querySelector(".showroom-card__media");
-        const mediaHome = media ? media.parentElement : null;
-        const mediaNextSibling = media ? media.nextSibling : null;
-
-        const moveMediaToExpanded = () => {
-          if (!media) return;
-          expandedTop.appendChild(media);
-        };
-
-        const restoreMedia = () => {
-          if (!media || !mediaHome) return;
-          if (mediaNextSibling && mediaNextSibling.parentNode === mediaHome) {
-            mediaHome.insertBefore(media, mediaNextSibling);
-          } else {
-            mediaHome.appendChild(media);
-          }
-        };
-
-        const open = () => {
-          if (isExpanded(card)) return;
-
-          // Record scroll position of the carousel so we can restore exactly.
-          const savedScrollLeft = track.scrollLeft;
-
-          // Placeholder keeps the carousel layout stable.
-          const r = card.getBoundingClientRect();
-          const spacer = document.createElement("div");
-          spacer.className = "showroom-card__spacer omnx-card__spacer";
-          spacer.style.flex = "0 0 auto";
-          spacer.style.width = `${Math.round(r.width)}px`;
-          spacer.style.height = `${Math.round(r.height)}px`;
-
-          // Insert placeholder and move card to body (avoids overflow/transform clipping).
-          card.parentNode.insertBefore(spacer, card);
-          document.body.appendChild(card);
-
-          // Start from the card's original on-screen rect.
-          const start = {
-            left: Math.round(r.left),
-            top: Math.round(r.top),
-            width: Math.round(r.width),
-            height: Math.round(r.height),
-          };
-
-          // Become fixed and set start geometry immediately.
-          card.classList.add("is-animating");
-          card.style.position = "fixed";
-          card.style.margin = "0";
-          animateTo(card, start);
-
-          // Mark expanded (this reveals the expanded panel via existing showroom CSS)
-          card.classList.add("is-expanded");
-          card.classList.add("is-expanding");
-          expandedPanel.setAttribute("aria-hidden", "false");
-          setBackdropOpen(true);
-          setRootModalOpen(true);
-
-          // Move media into expanded top for a proper “hero dock” animation.
-          moveMediaToExpanded();
-
-          // Restore carousel scroll now that the DOM changed.
-          track.scrollLeft = savedScrollLeft;
-
-          // Animate to target rect.
-          const target = getExpandedTargetRect();
-          const doAnim = () => {
-            if (!prefersReducedMotion) {
-              requestAnimationFrame(() => animateTo(card, target));
-            } else {
-              animateTo(card, target);
-            }
-          };
-          doAnim();
-
-          // Finish animation: let expandedTop dock back to 34% and show body.
-          const finish = () => {
-            card.classList.remove("is-expanding");
-            card.classList.remove("is-animating");
-            // Keep position fixed; geometry stays inline while expanded.
-          };
-
-          if (prefersReducedMotion) {
-            finish();
-          } else {
-            const onEnd = (e) => {
-              // Width/height/left/top transitions can all fire; we only need the first.
-              card.removeEventListener("transitionend", onEnd);
-              finish();
-            };
-            card.addEventListener("transitionend", onEnd);
-          }
-
-          // Store close hook on the node (used by backdrop/esc).
-          card.__howClose = () => close(spacer, savedScrollLeft);
-        };
-
-        const close = (spacer, restoreScrollLeft) => {
-          if (!isExpanded(card)) return;
-
-          const endRect = spacer.getBoundingClientRect();
-
-          // During close, keep expandedTop full height to avoid jump.
-          card.classList.add("is-expanding");
-          card.classList.add("is-animating");
-
-          // Animate back to placeholder position/size.
-          if (!prefersReducedMotion) {
-            requestAnimationFrame(() => {
-              animateTo(card, {
-                left: Math.round(endRect.left),
-                top: Math.round(endRect.top),
-                width: Math.round(endRect.width),
-                height: Math.round(endRect.height),
-              });
-            });
-          } else {
-            animateTo(card, {
-              left: Math.round(endRect.left),
-              top: Math.round(endRect.top),
-              width: Math.round(endRect.width),
-              height: Math.round(endRect.height),
-            });
-          }
-
-          // Hide modal/backdrop now (keeps UI responsive while animating back).
-          expandedPanel.setAttribute("aria-hidden", "true");
-          setBackdropOpen(false);
-          setRootModalOpen(false);
-
-          const cleanup = () => {
-            // Restore DOM position
-            spacer.parentNode.insertBefore(card, spacer);
-            spacer.remove();
-
-            // Remove expanded classes
-            card.classList.remove("is-expanded", "is-expanding", "is-animating");
-
-            // Restore media
-            restoreMedia();
-
-            // Clear inline geometry so the carousel styles apply again
-            card.style.position = "";
-            card.style.margin = "";
-            clearInlineGeometry(card);
-
-            // Restore exact scroll
-            track.scrollLeft = restoreScrollLeft;
-
-            card.__howClose = null;
-          };
-
-          if (prefersReducedMotion) {
-            cleanup();
-          } else {
-            const onEnd = () => {
-              card.removeEventListener("transitionend", onEnd);
-              cleanup();
-            };
-            card.addEventListener("transitionend", onEnd);
-          }
-        };
-
-        expandBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-
-          if (isExpanded(card)) {
-            const closer = card.__howClose;
-            if (typeof closer === "function") closer();
-            return;
-          }
-          open();
-        });
-      };
-
-      cards.forEach(attachExpansion);
-
-      // Backdrop closes the currently open card
-      backdrop.addEventListener("click", () => {
-        const open = cards.find((c) => c.classList.contains("is-expanded"));
-        if (open && typeof open.__howClose === "function") open.__howClose();
-      });
-
-      window.addEventListener("keydown", (e) => {
-        if (e.key !== "Escape") return;
-        const open = cards.find((c) => c.classList.contains("is-expanded"));
-        if (open && typeof open.__howClose === "function") open.__howClose();
-      });
-
-      updateNav();
-      window.addEventListener("load", updateNav, { once: true });
-      window.addEventListener("resize", updateNav, { passive: true });
-    };
-
-    roots.forEach(initCarousel);
-  } catch (err) {
-    console.warn("[ABOUT] how carousel disabled:", err);
-  }
-})();
-
-
 
 
 // BACKEND & FORM HANDLERS

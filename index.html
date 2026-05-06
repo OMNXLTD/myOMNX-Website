@@ -27,15 +27,15 @@
     name="twitter:description" />
   <link href="https://myomnx.com/" rel="canonical" />
   <link crossorigin="" href="https://d3e54v103j8qbb.cloudfront.net" rel="preconnect" />
+  <link rel="preload" as="image" href="assets/home-page-hero-image-mobile.webp" media="(max-width: 768px)" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/home-page-section-5-left.webp" fetchpriority="low" />
+  <link rel="preload" as="image" href="assets/home-page-section-5-right.webp" fetchpriority="low" />
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 <script defer="" src="js/loading.js"></script>
 
 <body class="body">
-  <!-- NAV -->
-  <div data-include="partials/nav.html"></div>
-
   <!-- HERO 1 - OMGO sphere -->
   <section class="hero-section">
     <div class="hero-container">
@@ -45,16 +45,29 @@
           Go <span class="hero-words"><span class="word">smart, playful</span></span> recovery.
         </p>
         <div class="button-group">
-          <a href="omgo.html#see-it-in-real-action" class="cta-button">
+          <a href="#" class="cta-button">
             <div class="button_label">Learn More</div>
           </a>
-          <a href="pre-launch-sign-up.html" class="cta-button secondary">
-            <div class="button_label">FREE Trial £0</div>
+          <a class="cta-button secondary" href="#" data-newsletter-trigger>
+            <div class="button_label">Get updates</div>
           </a>
         </div>
       </div>
-      <img class="hero-display-image clamped" src="assets/home-page-hero-image.webp" alt="OMGO Sphere close-up"
-        loading="eager" decoding="async" fetchpriority="high" />
+      <picture>
+        <source
+          media="(max-width: 768px)"
+          srcset="assets/home-page-hero-image-mobile.webp"
+        />
+
+        <img
+          class="hero-display-image clamped"
+          src="assets/home-page-hero-image.webp"
+          alt="OMGO Sphere close-up"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </picture>
     </div>
   </section>
 
@@ -67,129 +80,424 @@
           Go <span class="hero-words"><span class="word">portable, minimalistic</span></span> recovery.
         </p>
         <div class="button-group">
-          <a href="omgo.html#see-it-in-real-action" class="cta-button">
+          <a href="#" class="cta-button">
             <div class="button_label">Learn More</div>
           </a>
-          <a href="pre-launch-sign-up.html" class="cta-button secondary">
-            <div class="button_label">FREE Trial £0</div>
+          <a class="cta-button secondary" href="#" data-newsletter-trigger>
+            <div class="button_label">Get updates</div>
           </a>
         </div>
       </div>
-      <img class="hero-display-image blur" src="assets/omgo+hand+forearm 1.png" alt="OMGO MINI"
+      <img class="hero-display-image blur" src="assets/home-page-hero-image-mini.webp" alt="OMGO MINI"
         loading="eager" decoding="async" fetchpriority="high" />
     </div>
   </section>
 
-  <!-- SECTION 1 -->
-  <section class="section section--style">
-    <div class="hero-container">
-      <div class="hero-container-block tier-2 style-your-recovery-card">
-        <h1 class="hero-card-title secondary">Style Your Recovery.</h1>
-        <p class="hero-card-subtitle secondary">
-          Switch up your <span class="hero-words"><span class="word secondary">look</span></span> with vibrant silicone casings,
-          <span class="hero-words"><span class="word secondary">express</span></span> your fitness style.
-        </p>
-        <div class="button-group">
-          <a href="omgo.html#see-it-in-real-action" class="cta-button">
-            <div class="button_label">Learn More</div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- SECTION 3 — MOVEMENT-BASED RECOVERY IDEA -->
+  <section class="section movement-pillars" aria-labelledby="movement-pillars-title">
+    <div class="movement-pillars__inner">
+      <header class="movement-pillars__header">
+        <p class="movement-pillars__eyebrow">THE OMGO FAMILY</p>
 
-  <!-- SECTION 2 -->
-  <section class="section section--personalise">
-    <div class="hero-container">
-      <div class="hero-container-block tier-2">
-        <h1 class="hero-card-title">Personalise Your Move.</h1>
-        <p class="hero-card-subtitle">
-          <span class="hero-words"><span class="word">Shake</span></span> to create your own massage
-          <span class="hero-words"><span class="word">pulses, customise</span></span> your way of recovery.
-        </p>
-        <div class="button-group">
-          <a href="omgo.html#see-it-in-real-action" class="cta-button">
-            <div class="button_label">Learn More</div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+        <h2 id="movement-pillars-title" class="movement-pillars__title">
+          One Recovery Idea</br> Felt in Two OMGO Ways.
+        </h2>
 
-  <!-- SECTION 3 -->
-  <section class="section section--invention">
-    <div class="hero-container">
-      <div class="hero-container-block tier-2">
-        <h1 class="hero-card-title">Invented in the UK.</h1>
-        <p class="hero-card-subtitle">
-          Made with <span class="hero-words"><span class="word">precision & intelligence</span></span>, built for
-          <span class="hero-words"><span class="word">everybody.</span></span>
-        </p>
-        <div class="button-group">
-          <a href="/about-omnx.html" class="cta-button">
-            <div class="button_label">Founder's Story</div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Section FAQ -->
-  <section class="section" id="faq">
-    <div class="section__inner">
-      <!-- Header -->
-      <header class="faq-header">
-        <div class="faq-eyebrow">FAQ</div>
-        <h2 class="faq-title">Answers for your active life</h2>
-        <p class="faq-subtitle">
-          Explore our most common questions about customising your recovery, using our tools,
-          and making movement more enjoyable every day.
+        <p class="movement-pillars__intro">
+          Your recovery should feel more <strong>personal,</strong> tactile, and easy to return to,
+          whether you want something playful &amp; expressive, or compact &amp; functional.
         </p>
       </header>
 
-      <!-- Grid -->
-      <div class="section-grid section-grid--3">
-        <article class="faq-item">
-          <h3>How does shake-to-program work?</h3>
-          <p>Just give the massage ball a shake in the recording mode—our sensors read your unique motion and instantly
-            create a custom vibration beat. It’s your rhythm, your way.</p>
+      <div class="movement-pillars__bubble-field" aria-label="OMGO design pillars">
+        <article class="pillar-bubble pillar-bubble--movement">
+          <div class="pillar-bubble__filter" aria-hidden="true"></div>
+          <div class="pillar-bubble__overlay" aria-hidden="true"></div>
+          <div class="pillar-bubble__specular" aria-hidden="true"></div>
+
+          <div class="pillar-bubble__content">
+            <h3>Personalised Movement</h3>
+            <p>
+              Shape recovery around your own rhythm, with <strong>movement-led</strong> pulse pattern <strong>customisation,</strong>
+              expressive styling, and a more personal way to feel each session.
+            </p>
+          </div>
         </article>
 
-        <article class="faq-item">
-          <h3>Can I personalise the <strong>look</strong> of my massage ball?</h3>
-          <p>Yes! Mix and match silicone skins and centre buttons to suit your mood or style. You can even design your
-            own set of skins. The skin is interchangeable, dedicated for self-expression.</p>
+        <article class="pillar-bubble pillar-bubble--tactile">
+          <div class="pillar-bubble__filter" aria-hidden="true"></div>
+          <div class="pillar-bubble__overlay" aria-hidden="true"></div>
+          <div class="pillar-bubble__specular" aria-hidden="true"></div>
+
+          <div class="pillar-bubble__content">
+            <h3>Tactile Design</h3>
+            <p>
+              Built to feel satisfying in the hand, with a <strong>quiet yet powerful vibration</strong> experience
+              that shaped around touch, texture, and physical interaction.
+            </p>
+          </div>
         </article>
 
-        <article class="faq-item">
-          <h3>Is it <strong>quiet</strong> enough for shared spaces?</h3>
-          <p>Absolutely. The advanced motor keeps things powerful but whisper-quiet, so you can recover at home, at your
-            desk, or anywhere—without bothering anyone. We are well below 50&nbsp;dB.</p>
-        </article>
+        <article class="pillar-bubble pillar-bubble--everyday">
+          <div class="pillar-bubble__filter" aria-hidden="true"></div>
+          <div class="pillar-bubble__overlay" aria-hidden="true"></div>
+          <div class="pillar-bubble__specular" aria-hidden="true"></div>
 
-        <article class="faq-item">
-          <h3><strong>Who</strong> can use these recovery tools?</h3>
-          <p>Anyone who wants to move better and feel good—athletes, creators, desk workers, and everyone in between. No
-            experience needed, just curiosity.</p>
-        </article>
-
-        <article class="faq-item">
-          <h3>What’s coming with the <strong>app</strong>?</h3>
-          <p>Soon you’ll get guided routines and community challenges—all designed to make recovery smarter, more
-            social, and more fun.</p>
-        </article>
-
-        <article class="faq-item">
-          <h3>Can I <strong>recharge</strong> my massage ball?</h3>
-          <p>Absolutely. Just plug in with a USB-C cable. You can charge with your laptop or power bank, in your car, or
-            at a wall socket.</p>
+          <div class="pillar-bubble__content">
+            <h3>Everyday Recovery</h3>
+            <p>
+              Designed for real routines, from training, work, travel, to daily reset moments,
+              helping recovery become enjoyable and <strong>habit-forming.</strong>
+            </p>
+          </div>
         </article>
       </div>
     </div>
   </section>
 
+  <!-- SECTION 3.5 — Product Texture Banner -->
+  <section class="section product-texture-banner" aria-label="OMGO product texture and material detail">
+    <div class="product-texture-banner__media" aria-hidden="true">
+      <img
+        class="product-texture-banner__image"
+        src="assets/home-page-section-3-4.webp"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
 
+    <div class="product-texture-banner__veil" aria-hidden="true"></div>
+  </section>
 
+  <!-- SECTION 4 — Founder Story / Invented in the UK -->
+  <section class="section founder-story" aria-labelledby="founder-story-title">
+    <div class="founder-story__inner">
+      <div class="founder-story__content">
+        <p class="founder-story__eyebrow">FOUNDER-LED ENGINEERING</p>
+
+        <h2 id="founder-story-title" class="founder-story__title">
+          Invented in the UK.
+        </h2>
+
+        <p class="founder-story__copy">
+          OMNX is a <strong>UK-based, founder-led</strong> original recovery technology brand built through hands-on work across product design,
+          electronics, mechanics, materials, firmware, and real-world user testing. It began with a simple question:
+          what if recovery could feel more personal, tactile, and less like cold fitness equipment?
+        </p>
+
+        <button
+          class="cta-button founder-story__button"
+          type="button"
+          data-omnx-modal-open="founder-story"
+          aria-haspopup="dialog"
+        >
+          <span class="button_label">Read the founder story</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Story Modal -->
+    <div
+      class="omnx-modal"
+      data-omnx-modal="founder-story"
+      aria-hidden="true"
+    >
+      <div class="omnx-modal__backdrop" data-omnx-modal-close></div>
+
+      <button
+        class="omnx-modal__close"
+        type="button"
+        data-omnx-modal-close
+        aria-label="Close omnx story"
+      >
+        ×
+      </button>
+
+      <div
+        class="omnx-modal__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="omnx-modal-title"
+      >
+
+        <p class="omnx-modal__eyebrow">THE FOUNDER STORY</p>
+
+        <h3 id="omnx-modal-title" class="omnx-modal__title">
+          From a simple question to working MVP devices.
+        </h3>
+
+        <div class="omnx-modal__body">
+          <p class="omnx-modal__copy">
+            OMGO began with a simple observation: many recovery tools are powerful, but they often feel cold, clinical, and easy to forget. A massage device tends to wait in a drawer until soreness appears; a tactile object, by contrast, invites the hand before the mind has even decided to use it.
+          </p>
+
+          <p class="omnx-modal__copy">
+            The early idea was inspired by that difference. What if recovery could feel less like a task and more like something you naturally want to pick up, hold, twist, personalise, and return to? That question led OMNX toward a new kind of recovery object: one shaped around movement, touch, vibration, and daily interaction rather than utility alone.
+          </p>
+
+          <p class="omnx-modal__copy">
+            Turning that idea into a credible product required a full clean-slate engineering effort. OMNX has been built through hands-on work across product design, electronics, mechanics, materials, firmware, prototyping, supplier development, and real-world testing — with every surface, internal structure, vibration feel, and interaction refined toward a more human product experience.
+          </p>
+
+          <p class="omnx-modal__copy">
+            The result is not just another massage device, but the beginning of a founder-led recovery technology brand: playful on the surface, serious underneath, and designed to make personal recovery feel more expressive, more tactile, and easier to build into everyday life.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: THE PITCH — WHY / HOW / FUTURE -->
+
+  <!-- WHY -->
+  <section class="section section--inverse pitch-why" aria-labelledby="pitch-why-title">
+    <div class="section__inner pitch-why__inner">
+      <div class="pitch-why__content">
+        <div class="eyebrow secondary">THE WHY</div>
+
+        <h2 id="pitch-why-title" class="pitch-why__headline">
+          <span class="whiten-seq">
+            Recovery tools are often powerful, but they can feel intense, functional, and impersonal.
+            OMNX is building a personalised recovery technology that feels more human, expressive, and easier to return to every day.
+          </span>
+        </h2>
+
+        <p class="subheading pitch-why__sub">
+          Many devices focus on speed, strength, and utility alone. OMNX starts from a different belief:
+          recovery should not feel like another cold fitness task. It should feel personal, tactile,
+          and naturally part of daily movement.
+        </p>
+      </div>
+
+      <div
+        class="before-after-slider"
+        data-before-after
+        style="--ba-pos: 100%;"
+        aria-label="Before and after recovery experience comparison"
+      >
+        <div class="before-after-slider__stage">
+          <img
+            class="before-after-slider__image before-after-slider__image--left"
+            src="assets/home-page-section-5-left.webp"
+            alt="Traditional cold recovery tools in a dark studio"
+            loading="eager"
+            decoding="async"
+            fetchpriority="low"
+          />
+
+          <div class="before-after-slider__right-wrap">
+            <img
+              class="before-after-slider__image before-after-slider__image--right"
+              src="assets/home-page-section-5-right.webp"
+              alt="Warm personalised OMGO recovery devices in a sandstone studio"
+              loading="eager"
+              decoding="async"
+              fetchpriority="low"
+            />
+          </div>
+
+          <div class="before-after-slider__veil" aria-hidden="true"></div>
+
+          <button
+            class="before-after-slider__handle"
+            type="button"
+            aria-label="Drag to compare traditional recovery with OMNX recovery"
+          >
+            <span class="before-after-slider__line" aria-hidden="true"></span>
+            <span class="before-after-slider__knob" aria-hidden="true">
+              <span class="before-after-slider__arrow before-after-slider__arrow--left">‹</span>
+              <span class="before-after-slider__arrow before-after-slider__arrow--right">›</span>
+            </span>
+          </button>
+
+          <div class="before-after-slider__labels" aria-hidden="true">
+            <span>Before</span>
+            <span>OMNX direction</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="section section--inverse section--how" id="model-breakdown" aria-label="Model Breakdown">
+    <div class="section__inner how-hero__inner">
+      <div class="eyebrow secondary">THE HOW</div>
+
+      <div class="how-hero-container">
+        <p class="hero-card-title">
+          Built Through Founder-Led Engineering.
+        </p>
+
+        <p class="hero-card-subtitle">
+          That is why we invested <span class="highlighted">3000+ hours</span> into prototyping,
+          testing, and refining <span class="highlighted">OMGO</span> handheld percussive massagers as a
+          ground-up recovery experience, so recovery can <span class="highlighted">inspire movements & be active</span> 
+          instead of feeling like another routine to follow.
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="button-group section-cta">
+        <a class="cta-button secondary" href="#" data-newsletter-trigger>
+          <div class="button_label">Get updates</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW → FUTURE TRANSITION BANNER -->
+  <section
+    class="section how-future-banner"
+    aria-label="Hardware-first recovery technology"
+  >
+    <div class="how-future-banner__media" aria-hidden="true">
+      <img
+        class="how-future-banner__image"
+        src="assets/home-page-section-5-how-future.webp"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <div class="how-future-banner__veil" aria-hidden="true"></div>
+
+    <div class="how-future-banner__inner">
+      <div class="how-future-banner__copy">
+        <p class="how-future-banner__eyebrow">THE BRIDGE</p>
+
+        <h2 class="how-future-banner__title">
+          <span class="how-future-banner__title-main">Built to be felt.</span>
+          <span class="how-future-banner__title-sub">Designed to become smarter.</span>
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUTURE -->
+  <section class="section section--inverse pitch-future" aria-labelledby="pitch-future-title">
+    <div class="section__inner pitch-future__inner">
+      <div class="pitch-future__content">
+        <div class="eyebrow secondary">THE NEAR FUTURE (coming soon, 2027)</div>
+
+        <h2 id="pitch-future-title" class="pitch-future__title">
+          myOMNX+
+        </h2>
+
+        <p class="pitch-future__copy">
+          The long-term vision is an <strong>AI-driven</strong> recovery platform that connects physical devices via Bluetooth with smarter guidance,
+          personal routines, and human-centred recovery data.
+        </p>
+
+        <button
+          class="cta-button secondary pitch-future__button"
+          type="button"
+          data-omnx-modal-open="myomnx-plus"
+          aria-haspopup="dialog"
+        >
+          <span class="button_label">Learn more about myOMNX+</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- myOMNX+ Modal -->
+    <div
+      class="omnx-modal"
+      data-omnx-modal="myomnx-plus"
+      aria-hidden="true"
+    >
+      <div class="omnx-modal__backdrop" data-omnx-modal-close></div>
+
+      <button
+        class="omnx-modal__close"
+        type="button"
+        data-omnx-modal-close
+        aria-label="Close myOMNX+ article"
+      >
+        ×
+      </button>
+
+      <div
+        class="omnx-modal__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="myomnx-plus-modal-title"
+      >
+        <p class="omnx-modal__eyebrow">THE FUTURE PLATFORM</p>
+
+        <h3 id="myomnx-plus-modal-title" class="omnx-modal__title">
+          myOMNX+ is the future software direction for OMNX.
+        </h3>
+
+        <div class="omnx-modal__body">
+          <p class="omnx-modal__copy">
+            myOMNX+ is planned as a connected layer for guided routines, personalisation,
+            recovery insights, and smarter interaction between users and their OMGO devices.
+          </p>
+
+          <p class="omnx-modal__copy">
+            The first priority is real-world MVP testing of OMGO Sphere and OMGO Mini.
+            The platform will grow from what we learn: how people use the devices,
+            what routines they return to, and what kind of guidance actually helps.
+          </p>
+
+          <div class="omnx-modal__pillars" aria-label="myOMNX+ platform pillars">
+            <div class="omnx-modal__pillar">
+              <h4>Guided routines</h4>
+              <p>Simple recovery flows built around real usage moments, not generic instructions.</p>
+            </div>
+
+            <div class="omnx-modal__pillar">
+              <h4>Personalised recovery patterns</h4>
+              <p>More adaptive routines shaped by movement preferences, comfort, and repeat behaviour.</p>
+            </div>
+
+            <div class="omnx-modal__pillar">
+              <h4>Smarter device insights</h4>
+              <p>A future feedback layer that helps OMNX understand what actually improves everyday recovery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6 — FINAL CTA -->
+  <section class="section final-cta" aria-labelledby="final-cta-title" data-final-cta-reveal>
+    <div class="final-cta__bg" aria-hidden="true"></div>
+    <div class="final-cta__bg-wash" aria-hidden="true"></div>
+
+    <div class="final-cta__inner">
+      <div class="final-cta__card">
+        <div class="final-cta__glow final-cta__glow--one" aria-hidden="true"></div>
+        <div class="final-cta__glow final-cta__glow--two" aria-hidden="true"></div>
+
+        <p class="final-cta__eyebrow">MVP TESTING / PRE-LAUNCH</p>
+
+        <h2 id="final-cta-title" class="final-cta__title">
+          Help shape OMGO before launch.
+        </h2>
+
+        <p class="final-cta__copy">
+          OMNX is preparing a limited <strong>MVP testing phase</strong> for selected early users.
+          Join the pre-launch list or apply to test OMGO and share genuine <strong>feedback</strong>
+          before the product moves closer to launch.
+        </p>
+
+        <div class="final-cta__actions">
+          <a class="cta-button final-cta__primary" href="pre-launch-sign-up.html">
+            <span class="button_label">Apply for MVP Testing</span>
+          </a>
+
+          <a class="cta-button secondary final-cta__secondary" href="#" data-newsletter-trigger>
+            <span class="button_label">Get updates</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
   <!-- FOOTER -->
