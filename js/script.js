@@ -97,7 +97,7 @@
     items = [
       {
         label: "OMNX Home",
-        href: "index.html",
+        href: "",
         key: "home",
       },
       {
@@ -110,7 +110,7 @@
     items = [
       {
         label: "OMNX Home",
-        href: "index.html",
+        href: "",
         key: "home",
       },
       {
@@ -123,7 +123,7 @@
     items = [
       {
         label: "OMNX Home",
-        href: "index.html",
+        href: "",
         key: "home",
       },
       {
