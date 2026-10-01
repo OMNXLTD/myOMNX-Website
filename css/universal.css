@@ -2356,23 +2356,55 @@ p, li {
 
 .before-after-slider__labels {
   position: absolute;
-  left: clamp(1rem, 2vw, 1.5rem);
-  right: clamp(1rem, 2vw, 1.5rem);
-  bottom: clamp(1rem, 2vw, 1.5rem);
+  inset: 0;
   z-index: 3;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
+  overflow: hidden;
+  border-radius: inherit;
   pointer-events: none;
 }
 
-.before-after-slider__labels span {
+.before-after-slider__label {
+  --ba-label-opacity: 0;
+
+  position: absolute;
+  left: 0;
+  bottom: clamp(1rem, 2vw, 1.5rem);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.48rem 0.72rem 0.43rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+
+  background: rgba(12, 10, 9, 0.34);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px) saturate(1.08);
+  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+
   font-family: var(--font-body);
-  font-size: var(--hint-size);
-  color: rgba(255, 255, 255, 0.72);
+  font-size: clamp(0.64rem, 0.72vw, 0.76rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.075em;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.88);
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.55);
+
+  opacity: var(--ba-label-opacity);
+  transition: opacity 110ms linear;
+  will-change: transform, opacity;
+}
+
+.before-after-slider__label--left {
+  transform: translate3d(0, 0, 0) translateX(-100%);
+}
+
+.before-after-slider__label--right {
+  transform: translate3d(0, 0, 0);
 }
 
 .before-after-slider.is-draggable .before-after-slider__knob {
@@ -2482,6 +2514,7 @@ p, li {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-1);
   margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
 }
 
 .omnx-modal__pillar {
@@ -4538,8 +4571,15 @@ html.omnx-modal-lock body{
     min-height: clamp(17rem, 76vw, 24rem);
   }
 
-  .before-after-slider__labels {
-    display: none;
+  .before-after-slider__label {
+    bottom: 0.8rem;
+    max-width: 4.9rem;
+    padding: 0.4rem 0.52rem 0.36rem;
+    font-size: clamp(0.54rem, 2.3vw, 0.64rem);
+    line-height: 1.08;
+    letter-spacing: 0.055em;
+    text-align: center;
+    white-space: normal;
   }
 }
 

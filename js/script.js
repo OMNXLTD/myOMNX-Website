@@ -687,9 +687,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const stage = slider.querySelector(".before-after-slider__stage");
     const handle = slider.querySelector(".before-after-slider__handle");
+    const knob = slider.querySelector(".before-after-slider__knob");
+    const leftLabel = slider.querySelector(".before-after-slider__label--left");
+    const rightLabel = slider.querySelector(".before-after-slider__label--right");
     const images = Array.from(slider.querySelectorAll("img"));
 
-    if (!stage || !handle) return;
+    if (!stage || !handle || !leftLabel || !rightLabel) return;
 
     const prefersReducedMotion =
       window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
@@ -698,12 +701,119 @@ document.addEventListener("DOMContentLoaded", () => {
     let isDragging = false;
     let isInteractive = false;
     let activePointerId = null;
+    let labelTargetPercent = 100;
+    let labelCurrentPercent = 100;
+    let labelFrame = null;
+    let labelFrameTime = 0;
+
+    const labelMetrics = {
+      stageWidth: 0,
+      leftWidth: 0,
+      rightWidth: 0,
+      dividerGap: 32,
+      edgeInset: 12,
+    };
 
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+    const smoothstep = (edge0, edge1, value) => {
+      const t = clamp((value - edge0) / (edge1 - edge0), 0, 1);
+      return t * t * (3 - 2 * t);
+    };
+
+    const measureLabels = () => {
+      labelMetrics.stageWidth = stage.clientWidth;
+      labelMetrics.leftWidth = leftLabel.offsetWidth;
+      labelMetrics.rightWidth = rightLabel.offsetWidth;
+
+      const knobWidth = knob?.offsetWidth || 48;
+      labelMetrics.dividerGap = clamp((knobWidth / 2) + 7, 28, 40);
+      labelMetrics.edgeInset = clamp(labelMetrics.stageWidth * 0.02, 8, 16);
+    };
+
+    const getFitOpacity = (availableWidth, labelWidth) => {
+      if (!labelWidth) return 0;
+
+      /*
+        Keep the label fully visible while it fits. Once it begins to run out
+        of room, fade it quickly; the labels layer clips the final few pixels.
+      */
+      const fadeDistance = clamp(labelWidth * 0.2, 18, 28);
+      return smoothstep(-fadeDistance, 8, availableWidth - labelWidth);
+    };
+
+    const renderLabels = (percent) => {
+      const dividerX = labelMetrics.stageWidth * (percent / 100);
+      const leftAnchor = dividerX - labelMetrics.dividerGap;
+      const rightAnchor = dividerX + labelMetrics.dividerGap;
+
+      const leftRoom = leftAnchor - labelMetrics.edgeInset;
+      const rightRoom =
+        labelMetrics.stageWidth - rightAnchor - labelMetrics.edgeInset;
+
+      leftLabel.style.transform =
+        `translate3d(${leftAnchor.toFixed(2)}px, 0, 0) translateX(-100%)`;
+      rightLabel.style.transform =
+        `translate3d(${rightAnchor.toFixed(2)}px, 0, 0)`;
+
+      leftLabel.style.setProperty(
+        "--ba-label-opacity",
+        getFitOpacity(leftRoom, labelMetrics.leftWidth).toFixed(3)
+      );
+      rightLabel.style.setProperty(
+        "--ba-label-opacity",
+        getFitOpacity(rightRoom, labelMetrics.rightWidth).toFixed(3)
+      );
+    };
+
+    const updateLabelFollow = (now) => {
+      if (!labelFrameTime) labelFrameTime = now;
+
+      const elapsed = Math.min(now - labelFrameTime, 64);
+      const responseTime = isDragging ? 86 : 112;
+      const followAmount = 1 - Math.exp(-elapsed / responseTime);
+
+      labelCurrentPercent +=
+        (labelTargetPercent - labelCurrentPercent) * followAmount;
+      labelFrameTime = now;
+
+      if (Math.abs(labelTargetPercent - labelCurrentPercent) < 0.015) {
+        labelCurrentPercent = labelTargetPercent;
+      }
+
+      renderLabels(labelCurrentPercent);
+
+      if (labelCurrentPercent !== labelTargetPercent) {
+        labelFrame = requestAnimationFrame(updateLabelFollow);
+      } else {
+        labelFrame = null;
+        labelFrameTime = 0;
+      }
+    };
+
+    const queueLabelFollow = () => {
+      if (prefersReducedMotion) {
+        labelCurrentPercent = labelTargetPercent;
+        renderLabels(labelCurrentPercent);
+        return;
+      }
+
+      if (labelFrame === null) {
+        labelFrame = requestAnimationFrame(updateLabelFollow);
+      }
+    };
 
     const setPos = (percent) => {
       const safe = clamp(percent, 0, 100);
       slider.style.setProperty("--ba-pos", `${safe.toFixed(2)}%`);
+      handle.setAttribute("aria-valuenow", Math.round(safe).toString());
+      handle.setAttribute(
+        "aria-valuetext",
+        `${Math.round(safe)}% recovery equipment, ${Math.round(100 - safe)}% recovery experience`
+      );
+
+      labelTargetPercent = safe;
+      queueLabelFollow();
     };
 
     /*
@@ -711,7 +821,28 @@ document.addEventListener("DOMContentLoaded", () => {
       Set this immediately so the section never appears in a confusing half-state.
       100% = full left/before image.
     */
+    measureLabels();
+    renderLabels(100);
     setPos(100);
+
+    if ("ResizeObserver" in window) {
+      const resizeObserver = new ResizeObserver(() => {
+        measureLabels();
+        renderLabels(labelCurrentPercent);
+      });
+
+      resizeObserver.observe(stage);
+    } else {
+      window.addEventListener("resize", () => {
+        measureLabels();
+        renderLabels(labelCurrentPercent);
+      });
+    }
+
+    document.fonts?.ready.then(() => {
+      measureLabels();
+      renderLabels(labelCurrentPercent);
+    });
 
     const getPercentFromClientX = (clientX) => {
       const rect = stage.getBoundingClientRect();
