@@ -245,6 +245,260 @@
   });
 })();
 
+// ================= OMGO-MINI PRODUCT FILM =================
+(() => {
+  const dialog = document.querySelector("[data-omnx-film]");
+  const triggers = document.querySelectorAll("[data-omnx-film-open]");
+  if (!dialog || !triggers.length || dialog.__omnxFilmInit) return;
+  dialog.__omnxFilmInit = true;
+
+  const stage = dialog.querySelector("[data-omnx-film-stage]");
+  const playerSlot = dialog.querySelector("[data-omnx-film-player]");
+  const loading = dialog.querySelector("[data-omnx-film-loading]");
+  const error = dialog.querySelector("[data-omnx-film-error]");
+  const closeButton = dialog.querySelector("[data-omnx-film-close]");
+  const retryButton = dialog.querySelector("[data-omnx-film-retry]");
+  const root = document.documentElement;
+
+  let open = false;
+  let session = 0;
+  let player = null;
+  let sdkPromise = null;
+  let loadTimer = null;
+  let opener = null;
+  let scrollPosition = { x: 0, y: 0 };
+  let enteredFullscreen = false;
+  let enteredPlayerFullscreen = false;
+  let orientationAttempted = false;
+  let orientationLocked = false;
+
+  function fullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement;
+  }
+
+  function ownsFullscreen() {
+    const element = fullscreenElement();
+    return Boolean(element && (element === stage || stage.contains(element)));
+  }
+
+  function exitFullscreen() {
+    if (!ownsFullscreen()) return;
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (!exit) return;
+    try {
+      Promise.resolve(exit.call(document)).catch(() => {});
+    } catch (_) {
+      // The browser may already have exited fullscreen.
+    }
+  }
+
+  function setState(state) {
+    stage.dataset.state = state;
+    loading.hidden = state !== "loading";
+    error.hidden = state !== "error";
+    playerSlot.setAttribute("aria-busy", String(state === "loading"));
+  }
+
+  function removePlayer() {
+    clearTimeout(loadTimer);
+    const previousPlayer = player;
+    player = null;
+    // Removing the iframe stops video and audio even if the SDK is unavailable.
+    playerSlot.replaceChildren();
+    if (previousPlayer) previousPlayer.destroy().catch(() => {});
+  }
+
+  function loadSDK() {
+    if (window.Vimeo?.Player) return Promise.resolve(window.Vimeo);
+    if (sdkPromise) return sdkPromise;
+
+    sdkPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      const timeout = setTimeout(() => fail(), 15000);
+
+      function fail() {
+        clearTimeout(timeout);
+        script.remove();
+        reject(new Error("Vimeo player could not load"));
+      }
+
+      script.src = "https://player.vimeo.com/api/player.js";
+      script.async = true;
+      script.onload = () => {
+        clearTimeout(timeout);
+        if (window.Vimeo?.Player) resolve(window.Vimeo);
+        else fail();
+      };
+      script.onerror = fail;
+      document.head.appendChild(script);
+    }).catch((reason) => {
+      sdkPromise = null;
+      throw reason;
+    });
+
+    return sdkPromise;
+  }
+
+  function loadFilm() {
+    const currentSession = ++session;
+    const isCurrent = () => open && session === currentSession;
+    removePlayer();
+    setState("loading");
+
+    function fail() {
+      if (!isCurrent()) return;
+      session++;
+      removePlayer();
+      setState("error");
+    }
+
+    const iframe = document.createElement("iframe");
+    const url = new URL(`https://player.vimeo.com/video/${dialog.dataset.omnxFilmId}`);
+    url.search = new URLSearchParams({
+      autoplay: "0",
+      autopause: "1",
+      loop: "0",
+      playsinline: "0",
+      pip: "0",
+      badge: "0",
+      title: "0",
+      byline: "0",
+      portrait: "0",
+    }).toString();
+
+    iframe.title = "OMGO-mini by OMNX | Portable Handheld Massager | Product Film";
+    iframe.allow = "fullscreen; encrypted-media; picture-in-picture 'none'";
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    iframe.tabIndex = -1;
+    iframe.addEventListener("error", fail, { once: true });
+    iframe.src = url.href;
+    playerSlot.appendChild(iframe);
+    loadTimer = setTimeout(fail, 25000);
+
+    loadSDK().then(async (Vimeo) => {
+      if (!isCurrent()) return;
+      const film = new Vimeo.Player(iframe);
+      player = film;
+      film.on("error", ({ method } = {}) => {
+        if (!method || method === "ready" || method === "loadVideo") fail();
+      });
+      film.on("fullscreenchange", ({ fullscreen }) => {
+        if (!isCurrent()) return;
+        if (fullscreen) enteredPlayerFullscreen = true;
+        else if (enteredPlayerFullscreen && !ownsFullscreen()) closeFilm();
+      });
+
+      await film.ready();
+      if (!isCurrent()) return;
+      await film.pause();
+      // Each opening has a fresh iframe at 0:00. Seeking before the first play
+      // can itself start Vimeo playback, so do not reset with setCurrentTime().
+      if (!isCurrent()) return;
+      clearTimeout(loadTimer);
+      iframe.tabIndex = 0;
+      setState("ready");
+    }).catch(fail);
+  }
+
+  function requestLandscape() {
+    if (orientationAttempted || !screen.orientation?.lock) return;
+    orientationAttempted = true;
+    const currentSession = session;
+    try {
+      Promise.resolve(screen.orientation.lock("landscape")).then(() => {
+        if (open && session === currentSession) orientationLocked = true;
+        else screen.orientation.unlock();
+      }).catch(() => {});
+    } catch (_) {
+      // Portrait remains usable when orientation locking is unsupported.
+    }
+  }
+
+  function onFullscreenChange() {
+    if (!open) return;
+    if (ownsFullscreen()) {
+      enteredFullscreen = true;
+      requestLandscape();
+    } else if (enteredFullscreen) {
+      closeFilm();
+    }
+  }
+
+  function openFilm(event) {
+    event.preventDefault();
+    if (open) return;
+    opener = event.currentTarget;
+    scrollPosition = { x: window.scrollX, y: window.scrollY };
+    enteredFullscreen = false;
+    enteredPlayerFullscreen = false;
+    orientationAttempted = false;
+    orientationLocked = false;
+    open = true;
+
+    root.style.setProperty("--omnx-film-scroll-y", `-${scrollPosition.y}px`);
+    root.classList.add("omnx-film-open");
+    dialog.showModal();
+    closeButton.focus({ preventScroll: true });
+    loadFilm();
+
+    // Request synchronously from the click; waiting for Vimeo loses user activation.
+    const request = stage.requestFullscreen || stage.webkitRequestFullscreen;
+    if (request && !fullscreenElement()) {
+      try {
+        Promise.resolve(request.call(stage, { navigationUI: "hide" })).then(() => {
+          if (open) onFullscreenChange();
+          else exitFullscreen();
+        }).catch(() => {});
+      } catch (_) {
+        // Keep the screen-filling dialog if native fullscreen is unavailable.
+      }
+    }
+  }
+
+  function closeFilm() {
+    if (!open) return;
+    open = false;
+    session++;
+    removePlayer();
+    exitFullscreen();
+    if (orientationLocked) {
+      screen.orientation.unlock();
+      orientationLocked = false;
+    }
+    if (dialog.open) dialog.close();
+    root.classList.remove("omnx-film-open");
+    root.style.removeProperty("--omnx-film-scroll-y");
+
+    const previousScrollBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(scrollPosition.x, scrollPosition.y);
+    opener?.focus({ preventScroll: true });
+    root.style.scrollBehavior = previousScrollBehavior;
+  }
+
+  triggers.forEach((trigger) => trigger.addEventListener("click", openFilm));
+  closeButton.addEventListener("click", closeFilm);
+  retryButton.addEventListener("click", () => {
+    if (open) loadFilm();
+  });
+  dialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeFilm();
+  });
+  dialog.addEventListener("close", () => {
+    if (!dialog.open) closeFilm();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (open && event.key === "Escape") {
+      event.preventDefault();
+      closeFilm();
+    }
+  });
+  document.addEventListener("fullscreenchange", onFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+})();
+
 // // ============== INFINITE GALLERY: CINEMATIC REVEAL (ON ENTER) ==============
 // (() => {
 //     const sections = Array.from(document.querySelectorAll("[data-ig-reveal]"));

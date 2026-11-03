@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com" rel="preconnect" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet" />
-  <link href="css/universal.css" rel="stylesheet" type="text/css" />
+  <link href="css/universal.css?v=20261024-film1" rel="stylesheet" type="text/css" />
   <link href="assets/favicon.jpg" rel="shortcut icon" type="image/x-icon" />
   <link href="assets/webclip.jpg" rel="apple-touch-icon" />
   <meta
@@ -79,9 +79,15 @@
           Go <span class="hero-words"><span class="word">portable, minimalistic</span></span> recovery.
         </p>
         <div class="button-group">
-          <a href="#" class="cta-button">
-            <div class="button_label">Learn More</div>
-          </a>
+          <button
+            class="cta-button"
+            type="button"
+            data-omnx-film-open
+            aria-haspopup="dialog"
+            aria-controls="omgo-mini-film"
+          >
+            <span class="button_label">Learn More</span>
+          </button>
           <a class="cta-button secondary" href="#" data-newsletter-trigger>
             <div class="button_label">Get updates</div>
           </a>
@@ -533,10 +539,43 @@
   <!-- FOOTER -->
   <div data-include="partials/footer.html"></div>
 
+  <!-- Created on demand: Vimeo is not contacted until the film is opened. -->
+  <dialog
+    id="omgo-mini-film"
+    class="omnx-film"
+    aria-labelledby="omgo-mini-film-title"
+    data-omnx-film
+    data-omnx-film-id="1239016961"
+  >
+    <div class="omnx-film__stage" data-omnx-film-stage data-state="loading">
+      <h2 id="omgo-mini-film-title" class="omnx-film__sr-only">OMGO-mini product film</h2>
+
+      <button class="omnx-modal__close" type="button" data-omnx-film-close aria-label="Close film">
+        <span aria-hidden="true">×</span>
+      </button>
+
+      <div class="omnx-film__screen">
+        <div class="omnx-film__player" data-omnx-film-player aria-busy="true"></div>
+
+        <div class="omnx-film__status" data-omnx-film-loading role="status" aria-live="polite">
+          <span class="omnx-film__spinner" aria-hidden="true"></span>
+          <p>Loading the OMGO-mini film…</p>
+        </div>
+
+        <div class="omnx-film__status" data-omnx-film-error role="alert" hidden>
+          <p>The film couldn’t load. Please check your connection and try again.</p>
+          <button class="omnx-film__retry" type="button" data-omnx-film-retry>Try again</button>
+        </div>
+      </div>
+
+      <p class="omnx-film__rotate">Rotate your device for a larger view.</p>
+    </div>
+  </dialog>
+
 
   <!-- Scripts -->
   <script defer="" src="js/loading.js"></script>
-  <script defer src="js/script.js"></script>
+  <script defer src="js/script.js?v=20261024-film1"></script>
   <script defer src="js/partials.js"></script>
 </body>
 
