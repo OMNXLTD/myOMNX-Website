@@ -1044,6 +1044,49 @@ p, li {
   filter: blur(15px);
 }
 
+/* Sphere: one continuous photograph behind the copy and product. */
+.hero-section--sphere .hero-container {
+  display: grid;
+  grid-template-rows: minmax(min-content, 39%) 1fr;
+  aspect-ratio: 16 / 9;
+  min-height: 20rem;
+}
+
+.hero-section--sphere .hero-container-block {
+  box-sizing: border-box;
+  gap: clamp(0.55rem, 1.4vw, 1.25rem);
+  padding: 0.75rem clamp(1rem, 4vw, 3rem);
+}
+
+.hero-section--sphere .hero-card-title,
+.hero-section--sphere .hero-card-subtitle {
+  margin: 0;
+}
+
+.hero-section--sphere .button-group {
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 1.4vw, 1rem);
+}
+
+.hero-section--sphere .hero-sphere__backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-sphere__backdrop .hero-display-image {
+  height: 100%;
+  object-position: center bottom;
+}
+
+@media (max-width: 1100px) and (orientation: portrait) {
+  .hero-section--sphere .hero-container { aspect-ratio: 4 / 5; }
+}
+
+@media (max-width: 600px) and (orientation: portrait) {
+  .hero-section--sphere .hero-container { aspect-ratio: 9 / 16; }
+}
+
 /* ------------------------ General section settings ------------------------ */
 
 /* Base section: vertical spacing only (safe default) */
@@ -1212,7 +1255,10 @@ p, li {
   color: rgba(18, 16, 14, 0.94);
 }
 
-.movement-pillars__intro {
+.movement-pillars__intro,
+.movement-pillars__intro a:link,
+.movement-pillars__intro a:visited,
+.movement-pillars__intro a:active {
   max-width: 680px;
   margin: clamp(1rem, 2vw, 1.35rem) auto 0;
 
@@ -1221,6 +1267,12 @@ p, li {
   line-height: 1.62;
 
   color: rgba(34, 29, 24, 0.64);
+
+  transition: all 0.3s ease-in-out;
+}
+
+.movement-pillars__intro a:hover {
+  color: rgba(34, 29, 24, 0.9);
 }
 
 /* Bubble layout:
@@ -1554,7 +1606,7 @@ p, li {
   position: relative;
   overflow: hidden;
 
-  min-height: clamp(20rem, 46vw, 38rem);
+  min-height: clamp(20rem, 35vw, 38rem);
   padding: 0;
 
   background: #d8c4a5;
@@ -1621,6 +1673,97 @@ p, li {
   .product-texture-banner__media {
     transform: scale(1.08);
   }
+}
+
+/* ---------------------------------- OMGO Product Gallery ---------------------------------- */
+
+.omnx-product-gallery {
+  position: relative;
+  background: #000;
+}
+
+.omnx-product-gallery__track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.omnx-product-gallery__track::-webkit-scrollbar {
+  display: none;
+}
+
+.omnx-product-gallery__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  scroll-snap-align: start;
+}
+
+.omnx-product-gallery__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .omnx-product-gallery__track { cursor: grab; }
+}
+
+.omnx-product-gallery__track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.omnx-product-gallery__nav {
+  position: absolute;
+  inset-inline-start: 50%;
+  bottom: max(0.25rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+}
+
+.omnx-product-gallery__nav:not([hidden]) {
+  display: flex;
+}
+
+.omnx-product-gallery__dot {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+
+.omnx-product-gallery__dot::before {
+  content: "";
+  box-sizing: border-box;
+  width: 9px;
+  height: 9px;
+  /* border: 1px solid white; */
+  border-radius: 50%;
+  background: rgba(25, 20, 14, 0.55);
+  box-shadow: 0 0 0 1px rgba(25, 20, 14, 0.35);
+}
+
+.omnx-product-gallery__dot[aria-current="true"]::before {
+  background: white;
+}
+
+.omnx-product-gallery__track:focus-visible,
+.omnx-product-gallery__dot:focus-visible {
+  outline: 2px solid white;
+  outline-offset: -4px;
 }
 
 /* ---------------------------------- Section 4: Founder Story / Invented in the UK ---------------------------------- */
@@ -2671,7 +2814,7 @@ html.omnx-film-open body {
   max-width: 720px;
   margin: var(--space-2) 0 0;
   font-family: var(--font-body);
-  font-size: var(--text-xl-size);
+  font-size: clamp(1rem, 0.92rem + 0.32vw, 1.18rem);
   line-height: var(--text-xl-line);
   color: var(--text-inverse-secondary);
 }
@@ -3295,7 +3438,7 @@ html.omnx-film-open body {
     0;
 
   font-family: var(--font-body);
-  font-size: clamp(1rem, 0.92rem + 0.35vw, 1.2rem);
+  font-size: clamp(1rem, 0.92rem + 0.32vw, 1.18rem);
   line-height: 1.65;
 
   color: rgba(42, 34, 25, 0.72);
@@ -3764,10 +3907,15 @@ html.omnx-film-open body {
 
 .section--how .hero-card-subtitle{
   font-size: var(--h2-size);
+  text-align: center;
 }
 
-.section--how .hero-card-subtitle .highlighted{
+.hero-card-subtitle .highlighted{
   color: #fff;
+}
+
+.how-future-banner__copy .hero-card-subtitle {
+  text-align: right;
 }
 
 .section--how{
@@ -3861,6 +4009,18 @@ html.omnx-film-open body {
 }
 
 /* ===================== HOW SECTION: CINEMATIC CONTENT REVEAL ===================== */
+.section--how .hero-card-title {
+  font-size: var(--h2-size);
+  font-weight: var(--h1-weight);
+  line-height: var(--h2-line);
+}
+
+.section--how .hero-card-subtitle {
+  font-size: var(--h3-size);
+  font-weight: var(--h3-weight);
+  line-height: var(--h3-line);
+}
+
 .section--how .hero-card-title,
 .section--how .hero-card-subtitle,
 .section--how .button-group.section-cta{
@@ -4569,6 +4729,10 @@ html.omnx-modal-lock body{
     text-align: left;
   }
 
+  .how-future-banner__copy .hero-card-subtitle {
+    text-align: left;
+  }
+
   .how-future-banner__title {
     align-items: flex-start;
   }
@@ -4646,6 +4810,9 @@ html.omnx-modal-lock body{
   }
   .hero-card-subtitle {
     font-size: var(--h4-size);
+  }
+  .section--how .hero-card-subtitle{
+    font-size: var(--h3-size);
   }
   .omnx-carousel__track {
     padding: 2em 2em 3em 2em;

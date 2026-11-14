@@ -245,7 +245,7 @@
   });
 })();
 
-// ================= OMGO-MINI PRODUCT FILM =================
+// ================= OMGO PRODUCT FILMS =================
 (() => {
   const dialog = document.querySelector("[data-omnx-film]");
   const triggers = document.querySelectorAll("[data-omnx-film-open]");
@@ -253,6 +253,7 @@
   dialog.__omnxFilmInit = true;
 
   const stage = dialog.querySelector("[data-omnx-film-stage]");
+  const heading = dialog.querySelector("[data-omnx-film-heading]");
   const playerSlot = dialog.querySelector("[data-omnx-film-player]");
   const loading = dialog.querySelector("[data-omnx-film-loading]");
   const error = dialog.querySelector("[data-omnx-film-error]");
@@ -340,6 +341,7 @@
   }
 
   function loadFilm() {
+    const videoId = opener.dataset.omnxFilmOpen;
     const currentSession = ++session;
     const isCurrent = () => open && session === currentSession;
     removePlayer();
@@ -353,7 +355,8 @@
     }
 
     const iframe = document.createElement("iframe");
-    const url = new URL(`https://player.vimeo.com/video/${dialog.dataset.omnxFilmId}`);
+    const url = new URL(`https://player.vimeo.com/video/${videoId}`);
+
     url.search = new URLSearchParams({
       autoplay: "0",
       autopause: "1",
@@ -365,8 +368,11 @@
       byline: "0",
       portrait: "0",
     }).toString();
+    url.searchParams.set("initial_quality", "4k");
+    url.searchParams.set("quality", "4k");
+    url.searchParams.set("preload", "auto");
 
-    iframe.title = "OMGO-mini by OMNX | Portable Handheld Massager | Product Film";
+    iframe.title = heading.textContent;
     iframe.allow = "fullscreen; encrypted-media; picture-in-picture 'none'";
     iframe.allowFullscreen = true;
     iframe.referrerPolicy = "strict-origin-when-cross-origin";
@@ -427,8 +433,9 @@
 
   function openFilm(event) {
     event.preventDefault();
-    if (open) return;
+    if (open || !/^\d+$/.test(event.currentTarget.dataset.omnxFilmOpen)) return;
     opener = event.currentTarget;
+    heading.textContent = opener.dataset.omnxFilmTitle || "OMGO product film";
     scrollPosition = { x: window.scrollX, y: window.scrollY };
     enteredFullscreen = false;
     enteredPlayerFullscreen = false;
@@ -499,315 +506,6 @@
   document.addEventListener("webkitfullscreenchange", onFullscreenChange);
 })();
 
-// // ============== INFINITE GALLERY: CINEMATIC REVEAL (ON ENTER) ==============
-// (() => {
-//     const sections = Array.from(document.querySelectorAll("[data-ig-reveal]"));
-//     if (!sections.length) return;
-
-//     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-
-//     function prepareSection(section) {
-//         // Prevent double init
-//         if (section.__igRevealInit) return;
-//         section.__igRevealInit = true;
-
-//         // Mark ready (so CSS can safely apply without weird flashes)
-//         section.classList.add("ig-reveal-ready");
-
-//         // Optional: set stagger indices for items/images inside this section
-//         // Prefer explicit items if you add them; fallback to common patterns, then images.
-//         const items = section.querySelectorAll(
-//             "[data-ig-item], .ig__item, .infinite-gallery__item, img"
-//         );
-
-//         // Only stagger the first “screenful” to avoid huge delays if you have many images
-//         const maxStagger = 18;
-//         Array.from(items).slice(0, maxStagger).forEach((el, i) => {
-//             el.style.setProperty("--ig-i", String(i));
-//         });
-
-//         // If reduced motion: reveal immediately
-//         if (reduceMotion) {
-//             section.classList.add("is-revealed");
-//             return;
-//         }
-
-//         let revealed = false;
-//         const reveal = () => {
-//             if (revealed) return;
-//             revealed = true;
-//             section.classList.add("is-revealed");
-//         };
-
-//         if (!("IntersectionObserver" in window)) {
-//             reveal();
-//             return;
-//         }
-
-//         const io = new IntersectionObserver(
-//             (entries) => {
-//                 const on = entries.some((e) => e.isIntersecting);
-//                 if (!on) return;
-//                 reveal();
-//                 io.disconnect();
-//             },
-//             {
-//                 // Feel more “cinematic”: trigger slightly after it starts entering
-//                 threshold: 0.18,
-//                 rootMargin: "-10% 0px -10% 0px",
-//             }
-//         );
-
-//         io.observe(section);
-//     }
-
-//     // Init now
-//     sections.forEach(prepareSection);
-
-//     // If you inject partials later
-//     window.addEventListener("partials:loaded", () => {
-//         document.querySelectorAll("[data-ig-reveal]").forEach(prepareSection);
-//     });
-// })();
-
-// /* ===================== INFINITE GALLERY (true loop + directional buttons, no bounce) ===================== */
-// (() => {
-//     const root = document.querySelector("[data-ig]");
-//     if (!root || root.__ig_init) return;
-//     root.__ig_init = true;
-
-//     const scroller = root.querySelector("[data-ig-scroller]");
-//     const track = root.querySelector("[data-ig-track]");
-//     const prevBtn = root.querySelector("[data-ig-prev]");
-//     const nextBtn = root.querySelector("[data-ig-next]");
-//     if (!scroller || !track) return;
-
-//     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-
-//     // ========= EDIT THIS LIST (add/remove freely) =========
-//     const IG_IMAGES = [
-//         { src: "assets/about-page-gallery-photo-1.webp", alt: "OMGO in daily life – 1" },
-//         { src: "assets/about-page-gallery-photo-2.webp", alt: "OMGO in daily life – 2" },
-//         { src: "assets/about-page-gallery-photo-3.webp", alt: "OMGO in daily life – 3" },
-//         { src: "assets/about-page-gallery-photo-4.webp", alt: "OMGO in daily life – 4" },
-//         { src: "assets/about-page-gallery-photo-5.webp", alt: "OMGO in daily life – 5" },
-//         { src: "assets/about-page-gallery-photo-6.webp", alt: "OMGO in daily life – 6" },
-//     ];
-//     // ======================================================
-
-//     const N = IG_IMAGES.length;
-//     if (N < 2) return;
-
-//     const mod = (x, m) => ((x % m) + m) % m;
-
-//     const makeItem = ({ src, alt }, i, ariaHidden) => {
-//         const item = document.createElement("div");
-//         item.className = "ig__item";
-//         if (ariaHidden) item.setAttribute("aria-hidden", "true");
-
-//         const img = document.createElement("img");
-//         img.src = src;
-//         img.alt = alt || `OMGO in daily life – ${i + 1}`;
-//         img.loading = "lazy";
-//         img.decoding = "async";
-
-//         item.appendChild(img);
-//         return item;
-//     };
-
-//     // Build 3 sets: [before] [middle] [after]
-//     track.innerHTML = "";
-//     IG_IMAGES.forEach((d, i) => track.appendChild(makeItem(d, i, true)));
-//     IG_IMAGES.forEach((d, i) => track.appendChild(makeItem(d, i, false)));
-//     IG_IMAGES.forEach((d, i) => track.appendChild(makeItem(d, i, true)));
-
-//     // Measurements derived from middle set
-//     let base = 0;       // width of one set; also scrollLeft at start of middle set
-//     let offsets = [];   // offsets of each tile inside a set
-//     let ready = false;
-
-//     const measure = () => {
-//         const kids = Array.from(track.children);
-//         if (kids.length < 3 * N) return false;
-
-//         const middle = kids.slice(N, 2 * N);
-//         if (!middle[0]) return false;
-
-//         base = middle[0].offsetLeft; // == width of one full set
-//         const baseLeft = base;
-//         offsets = middle.map(el => el.offsetLeft - baseLeft);
-
-//         ready = base > 0 && offsets.length === N;
-//         return ready;
-//     };
-
-//     // Teleport instantly (no animation)
-//     const teleportTo = (left) => {
-//         const prev = scroller.style.scrollBehavior;
-//         scroller.style.scrollBehavior = "auto";
-//         scroller.scrollLeft = left;
-//         scroller.style.scrollBehavior = prev || "";
-//     };
-
-//     // Which “set” are we currently in? 0=before, 1=middle, 2=after
-//     const currentSet = () => {
-//         if (!ready) return 1;
-//         return Math.floor(scroller.scrollLeft / base);
-//     };
-
-//     // Position within current set [0..base)
-//     const withinSet = () => {
-//         if (!ready) return 0;
-//         const s = currentSet();
-//         return scroller.scrollLeft - s * base;
-//     };
-
-//     // Nearest tile index inside a set
-//     const nearestIndex = (within) => {
-//         let bestI = 0;
-//         let bestD = Infinity;
-//         for (let i = 0; i < offsets.length; i++) {
-//             const d = Math.abs(within - offsets[i]);
-//             if (d < bestD) {
-//                 bestD = d;
-//                 bestI = i;
-//             }
-//         }
-//         return bestI;
-//     };
-
-//     // Recenter logic:
-//     // - Manual scroll: wrap immediately so it feels infinite
-//     // - Programmatic scroll: wait until motion settles, then recenter (avoid mid-animation teleport)
-//     let isProgrammatic = false;
-//     let settleTimer = null;
-
-//     const recenterAfterSettle = () => {
-//         if (!ready) return;
-//         const s = currentSet();
-//         if (s === 1) return;
-
-//         // Preserve exact within-set position
-//         const within = withinSet();
-//         teleportTo(base + within);
-//     };
-
-//     const scheduleSettle = () => {
-//         clearTimeout(settleTimer);
-//         settleTimer = setTimeout(() => {
-//             // After scrolling stops (manual or programmatic), recenter invisibly.
-//             recenterAfterSettle();
-//             isProgrammatic = false;
-//         }, 140);
-//     };
-
-//     scroller.addEventListener("scroll", () => {
-//         if (!ready) return;
-//         // Never teleport mid-gesture. Always recenter only after scroll settles.
-//         scheduleSettle();
-//     }, { passive: true });
-
-//     const scrollToLeft = (left, behavior = "smooth") => {
-//         scroller.scrollTo({
-//             left,
-//             behavior: reduceMotion ? "auto" : behavior,
-//         });
-//     };
-
-//     // Directional step that NEVER bounces:
-//     // - If at last and going right -> go to first tile in NEXT set (keeps moving right)
-//     // - If at first and going left -> go to last tile in PREV set (keeps moving left)
-//     const step = (dir) => {
-//         if (!ready) return;
-
-//         let s = currentSet();
-
-//         // Safety: if somehow we’re outside [0..2], recenter to middle first
-//         if (s < 0 || s > 2) {
-//             teleportTo(base + withinSet());
-//             s = 1;
-//         }
-
-//         const within = withinSet();
-//         const i = nearestIndex(within);
-
-//         let nextI = mod(i + dir, N);
-//         let targetSet = s;
-
-//         if (dir > 0 && i === N - 1) targetSet = s + 1; // keep moving right
-//         if (dir < 0 && i === 0) targetSet = s - 1; // keep moving left
-
-//         // Keep targetSet inside [0..2]. If we’re at the outermost set, teleport to middle first.
-//         if (targetSet < 0 || targetSet > 2) {
-//             // recenter to middle preserving within-set position, then redo step
-//             teleportTo(base + within);
-//             targetSet = 1;
-//             if (dir > 0 && i === N - 1) targetSet = 2;
-//             if (dir < 0 && i === 0) targetSet = 0;
-//         }
-
-//         const left = targetSet * base + offsets[nextI];
-
-//         isProgrammatic = true;
-//         clearTimeout(settleTimer);
-
-//         scrollToLeft(left, "smooth");
-
-//         // If scrollend exists, use it; otherwise debounce settle
-//         if ("onscrollend" in window) {
-//             const onEnd = () => {
-//                 scroller.removeEventListener("scrollend", onEnd);
-//                 recenterAfterSettle();
-//                 isProgrammatic = false;
-//             };
-//             scroller.addEventListener("scrollend", onEnd, { once: true });
-//         } else {
-//             scheduleSettle();
-//         }
-//     };
-
-//     prevBtn?.addEventListener("click", () => step(-1));
-//     nextBtn?.addEventListener("click", () => step(1));
-
-//     scroller.addEventListener("keydown", (e) => {
-//         if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
-//         if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
-//     });
-
-//     // Init after layout settles
-//     const init = () => {
-//         if (!measure()) return;
-//         // Start at first tile of the middle set
-//         teleportTo(base + offsets[0]);
-//     };
-
-//     requestAnimationFrame(() => {
-//         init();
-
-//         // Re-measure once after images load (handles late layout shifts)
-//         let did = false;
-//         track.addEventListener("load", () => {
-//             if (did) return;
-//             did = true;
-//             const i = ready ? nearestIndex(withinSet()) : 0;
-//             measure();
-//             teleportTo(base + (offsets[i] ?? 0));
-//         }, true);
-//     });
-
-//     // Resize: keep the same index
-//     let resizeTimer = null;
-//     window.addEventListener("resize", () => {
-//         clearTimeout(resizeTimer);
-//         resizeTimer = setTimeout(() => {
-//             if (!ready) return;
-//             const i = nearestIndex(withinSet());
-//             measure();
-//             teleportTo(base + (offsets[i] ?? 0));
-//         }, 120);
-//     });
-// })();
-
 // ============== WORD SEQUENCING ANIMATION ==============
 document.addEventListener("DOMContentLoaded", () => {
     const block = document.querySelector(".whiten-seq");
@@ -863,6 +561,220 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.5 });
 
     io.observe(block);
+});
+
+// ============== OMGO PRODUCT GALLERY ==============
+document.querySelectorAll("[data-product-gallery]").forEach((gallery) => {
+  const track = gallery.querySelector("[data-product-gallery-track]");
+  const nav = gallery.querySelector("[data-product-gallery-nav]");
+  const slides = Array.from(track?.children || []);
+  if (!nav || slides.length < 2) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const idleMs = 10_000;
+  const introThreshold = 0.70;
+  const introDurationMs = 900;
+  const introIndex = Math.min(2, slides.length - 1);
+  let activeIndex = 0;
+  let scrollFrame = 0;
+  let drag = null;
+  let touching = false;
+  let inView = false;
+  let introInView = false;
+  let hasEntered = false;
+  let idleTimer = 0;
+  let introFrame = 0;
+  let previousSnap = "";
+
+  function goTo(index, instant = false) {
+    const slide = slides[Math.max(0, Math.min(index, slides.length - 1))];
+    const left = track.scrollLeft + slide.getBoundingClientRect().left - track.getBoundingClientRect().left;
+    track.scrollTo({ left, behavior: instant || reducedMotion.matches ? "instant" : "smooth" });
+  }
+
+  function canAdvance() {
+    return hasEntered && inView && !document.hidden && !reducedMotion.matches &&
+      !introFrame && !drag && !touching && !gallery.querySelector(":focus-visible");
+  }
+
+  function scheduleAdvance() {
+    clearTimeout(idleTimer);
+    if (!canAdvance()) return;
+    idleTimer = setTimeout(() => {
+      if (!canAdvance()) return;
+      goTo((activeIndex + 1) % slides.length);
+      scheduleAdvance();
+    }, idleMs);
+  }
+
+  function stopIntro(returnToFirst = false) {
+    if (!introFrame) return;
+    cancelAnimationFrame(introFrame);
+    introFrame = 0;
+    if (returnToFirst) track.scrollLeft = 0;
+    track.style.scrollSnapType = previousSnap;
+    setActiveIndex(Math.round(track.scrollLeft / track.clientWidth));
+  }
+
+  function playIntro() {
+    previousSnap = track.style.scrollSnapType;
+    track.style.scrollSnapType = "none";
+    track.scrollLeft = track.clientWidth * introIndex;
+
+    let start;
+    function animate(now) {
+      start ??= now;
+      const progress = Math.min(1, (now - start) / introDurationMs);
+      const eased = progress * progress * (3 - 2 * progress);
+      track.scrollLeft = track.clientWidth * introIndex * (1 - eased);
+      if (progress < 1) {
+        introFrame = requestAnimationFrame(animate);
+      } else {
+        stopIntro(true);
+        scheduleAdvance();
+      }
+    }
+    introFrame = requestAnimationFrame(animate);
+  }
+
+  function takeControl() {
+    hasEntered = true;
+    stopIntro();
+    clearTimeout(idleTimer);
+  }
+
+  function navigate(index) {
+    takeControl();
+    goTo(index);
+    scheduleAdvance();
+  }
+
+  const dots = slides.map((_, index) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "omnx-product-gallery__dot";
+    dot.setAttribute("aria-label", `Show photo ${index + 1} of ${slides.length}`);
+    dot.setAttribute("aria-controls", track.id);
+    dot.addEventListener("click", () => navigate(index));
+    return dot;
+  });
+
+  dots[0].setAttribute("aria-current", "true");
+  nav.replaceChildren(...dots);
+  nav.hidden = false;
+
+  function setActiveIndex(index) {
+    const next = Math.max(0, Math.min(slides.length - 1, index));
+    if (!Number.isFinite(next) || next === activeIndex) return;
+    dots[activeIndex].removeAttribute("aria-current");
+    dots[next].setAttribute("aria-current", "true");
+    activeIndex = next;
+  }
+
+  track.addEventListener("scroll", () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = 0;
+      if (introFrame) return;
+      setActiveIndex(Math.round(track.scrollLeft / track.clientWidth));
+    });
+  }, { passive: true });
+
+  gallery.addEventListener("keydown", (event) => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    const base = dots.includes(event.target) ? dots.indexOf(event.target) : activeIndex;
+    const targets = { ArrowLeft: base - 1, ArrowRight: base + 1, Home: 0, End: slides.length - 1 };
+    if (!Object.hasOwn(targets, event.key)) return;
+    event.preventDefault();
+    const index = Math.max(0, Math.min(targets[event.key], slides.length - 1));
+    if (dots.includes(event.target)) dots[index].focus({ preventScroll: true });
+    navigate(index);
+  });
+
+  // Let touch and trackpads use native scrolling; add dragging for a mouse.
+  track.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    takeControl();
+    drag = { id: event.pointerId, x: event.clientX, left: track.scrollLeft, index: activeIndex, moved: false };
+    track.setPointerCapture(event.pointerId);
+  });
+
+  track.addEventListener("pointermove", (event) => {
+    if (!drag || event.pointerId !== drag.id) return;
+    const delta = event.clientX - drag.x;
+    if (!drag.moved && Math.abs(delta) < 6) return;
+    drag.moved = true;
+    track.classList.add("is-dragging");
+    track.scrollLeft = drag.left - delta;
+  });
+
+  function endDrag(event) {
+    if (!drag || event.pointerId !== drag.id) return;
+    const start = drag;
+    drag = null;
+    track.classList.remove("is-dragging");
+    scheduleAdvance();
+    if (!start.moved) return;
+    const delta = event.clientX - start.x;
+    const step = event.type === "pointerup" && Math.abs(delta) >= Math.min(60, track.clientWidth * 0.15)
+      ? -Math.sign(delta)
+      : 0;
+    goTo(start.index + step);
+  }
+
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+  track.addEventListener("lostpointercapture", endDrag);
+
+  track.addEventListener("touchstart", () => {
+    touching = true;
+    takeControl();
+  }, { passive: true });
+
+  function endTouch(event) {
+    touching = event.touches.length > 0;
+    scheduleAdvance();
+  }
+  track.addEventListener("touchend", endTouch, { passive: true });
+  track.addEventListener("touchcancel", endTouch, { passive: true });
+
+  track.addEventListener("wheel", () => {
+    takeControl();
+    scheduleAdvance();
+  }, { passive: true });
+
+  gallery.addEventListener("focusin", (event) => {
+    if (event.target.matches(":focus-visible")) takeControl();
+    scheduleAdvance();
+  });
+  gallery.addEventListener("focusout", () => requestAnimationFrame(scheduleAdvance));
+
+  function updatePlayback() {
+    if (!inView || document.hidden || reducedMotion.matches) {
+      stopIntro(true);
+      if (reducedMotion.matches && !hasEntered) goTo(0, true);
+    } else if (introInView && !hasEntered) {
+      hasEntered = true;
+      playIntro();
+    }
+    scheduleAdvance();
+  }
+
+  if ("IntersectionObserver" in window) {
+    if (!reducedMotion.matches) {
+      goTo(introIndex, true);
+      setActiveIndex(introIndex);
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.intersectionRatio >= 0.25;
+      introInView = entry.intersectionRatio >= introThreshold;
+      updatePlayback();
+    }, { threshold: [0.25, introThreshold] });
+    observer.observe(gallery);
+  }
+
+  document.addEventListener("visibilitychange", updatePlayback);
+  reducedMotion.addEventListener("change", updatePlayback);
 });
 
 // ============== PRODUCT TEXTURE BANNER: PARALLAX ==============
@@ -1349,9 +1261,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     const IMAGES = [
-        "../assets/omgo-tech-drawing-page-1.webp",
-        "../assets/omgo-tech-drawing-page-2.webp",
-        "../assets/omgo-tech-drawing-page-3.webp",
+        "assets/omgo-tech-drawing-page-1.webp",
+        "assets/omgo-tech-drawing-page-2.webp",
+        "assets/omgo-tech-drawing-page-3.webp",
     ];
 
     const LOOP_MS = 6000;          // change every 6000ms (as requested)
@@ -1380,10 +1292,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const preload = (url) =>
         new Promise((res) => {
             const img = new Image();
+            img.fetchPriority = "low";
             img.onload = () => res(true);
             img.onerror = () => res(false);
             img.src = url;
         });
+
+    // Request the drawings at startup; entering the section only triggers playback.
+    const drawingsReady = Promise.all(IMAGES.map(preload));
 
     let idx = 0;
     let topIsA = true;
@@ -1486,7 +1402,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (startedOnce) return;
         startedOnce = true;
 
-        await Promise.all(IMAGES.map(preload));
+        await drawingsReady;
 
         // start from page 1 visible (no flashing yet)
         idx = 0;

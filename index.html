@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com" rel="preconnect" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet" />
-  <link href="css/universal.css?v=20261024-film1" rel="stylesheet" type="text/css" />
+  <link href="css/universal.css?v=20261114-product-gallery" rel="stylesheet" type="text/css" />
   <link href="assets/favicon.jpg" rel="shortcut icon" type="image/x-icon" />
   <link href="assets/webclip.jpg" rel="apple-touch-icon" />
   <meta
@@ -23,11 +23,10 @@
   <meta content="summary_large_image" name="twitter:card" />
   <meta content="OMNX" name="twitter:title" />
   <meta
-    content="Smart recovery meets playful design. Sign up to test OMGO — a customisable vibrating massage ball by OMNX."
+    content="Smart recovery meets playful design. Sign up to test OMGO — a customisable percussive vibrating massage ball by OMNX."
     name="twitter:description" />
   <link href="https://myomnx.com/" rel="canonical" />
   <link crossorigin="" href="https://d3e54v103j8qbb.cloudfront.net" rel="preconnect" />
-  <link rel="preload" as="image" href="assets/home-page-hero-image-mobile.webp" media="(max-width: 768px)" fetchpriority="high" />
   <link rel="preload" as="image" href="assets/home-page-section-5-left.webp" fetchpriority="low" />
   <link rel="preload" as="image" href="assets/home-page-section-5-right.webp" fetchpriority="low" />
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -35,33 +34,44 @@
 </head>
 
 <body class="body">
-  <!-- HERO 1 - OMGO sphere -->
-  <section class="hero-section">
+  <!-- HERO 1 - OMGO-sphere -->
+  <section class="hero-section hero-section--sphere" id="OMGO-sphere">
     <div class="hero-container">
       <div class="hero-container-block">
-        <h1 class="hero-card-title">OMGO sphere</h1>
+        <h1 class="hero-card-title">OMGO-sphere</h1>
         <p class="hero-card-subtitle">
           Go <span class="hero-words"><span class="word">smart, playful</span></span> recovery.
         </p>
         <div class="button-group">
-          <a href="#" class="cta-button">
-            <div class="button_label">Learn More</div>
-          </a>
+          <button
+            class="cta-button"
+            type="button"
+            data-omnx-film-open="1246542392"
+            data-omnx-film-title="OMGO-sphere by OMNX | Rotatable Handheld Massager | Product Film"
+            aria-haspopup="dialog"
+            aria-controls="omnx-product-film"
+          >
+            <span class="button_label">See it in action</span>
+          </button>
           <a class="cta-button secondary" href="#" data-newsletter-trigger>
             <div class="button_label">Get updates</div>
           </a>
         </div>
       </div>
-      <picture>
+      <picture class="hero-sphere__backdrop">
         <source
-          media="(max-width: 768px)"
-          srcset="assets/home-page-hero-image-mobile.webp"
+          media="(max-width: 1100px) and (orientation: portrait)"
+          srcset="assets/home-page-hero-image-sphere-4-5.webp"
         />
-
+        <source
+          media="(max-width: 768px) and (orientation: portrait)"
+          srcset="assets/home-page-hero-image-sphere-9-16.webp"
+        />
+        
         <img
-          class="hero-display-image clamped"
-          src="assets/home-page-hero-image.webp"
-          alt="OMGO Sphere close-up"
+          class="hero-display-image"
+          src="assets/home-page-hero-image-sphere-16-9.webp"
+          alt="OMGO-Sphere close-up against a dark studio backdrop"
           loading="eager"
           decoding="async"
           fetchpriority="high"
@@ -70,11 +80,11 @@
     </div>
   </section>
 
-  <!-- HERO 2 - OMGO mini -->
-  <section class="hero-section">
+  <!-- HERO 2 - OMGO-mini -->
+  <section class="hero-section" id="OMGO-mini">
     <div class="hero-container">
       <div class="hero-container-block-overlay">
-        <h1 class="hero-card-title">OMGO mini</h1>
+        <h1 class="hero-card-title">OMGO-mini</h1>
         <p class="hero-card-subtitle">
           Go <span class="hero-words"><span class="word">portable, minimalistic</span></span> recovery.
         </p>
@@ -82,19 +92,71 @@
           <button
             class="cta-button"
             type="button"
-            data-omnx-film-open
+            data-omnx-film-open="1239016961"
+            data-omnx-film-title="OMGO-mini by OMNX | Portable Handheld Massager | Product Film"
             aria-haspopup="dialog"
-            aria-controls="omgo-mini-film"
+            aria-controls="omnx-product-film"
           >
-            <span class="button_label">Learn More</span>
+            <span class="button_label">See it in action</span>
           </button>
           <a class="cta-button secondary" href="#" data-newsletter-trigger>
             <div class="button_label">Get updates</div>
           </a>
         </div>
       </div>
-      <img class="hero-display-image blur" src="assets/home-page-hero-image-mini.webp" alt="OMGO MINI"
+      <img class="hero-display-image blur" src="assets/home-page-hero-image-mini.webp" alt="OMGO-MINI"
         loading="eager" decoding="async" fetchpriority="high" />
+    </div>
+  </section>
+
+  <!-- Product Banner -->
+  <section class="section product-texture-banner" aria-label="OMGO product texture and material detail">
+    <div class="product-texture-banner__media" aria-hidden="true">
+      <img
+        class="product-texture-banner__image"
+        src="assets/mini-family-2.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        fetchpriority="low"
+      />
+    </div>
+
+    <div class="product-texture-banner__veil" aria-hidden="true"></div>
+  </section>
+
+  <!-- BUILT TO BE FELT BANNER -->
+  <section
+    class="section how-future-banner"
+    aria-label="Hardware-first recovery technology"
+  >
+    <div class="how-future-banner__media" aria-hidden="true">
+      <img
+        class="how-future-banner__image"
+        src="assets/home-page-section-5-how-future.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        fetchpriority="low"
+      />
+    </div>
+
+    <div class="how-future-banner__veil" aria-hidden="true"></div>
+
+    <div class="how-future-banner__inner">
+      <div class="how-future-banner__copy">
+        <p class="how-future-banner__eyebrow">THE BRIDGE</p>
+
+        <h2 class="how-future-banner__title">
+          <span class="how-future-banner__title-main">Built to be felt.</span>
+        </h2>
+
+
+
+        <p class="hero-card-subtitle">
+          A healthy habit can start with a moment <span class="highlighted">worth repeating.</span>
+        </p>
+      </div>
     </div>
   </section>
 
@@ -105,13 +167,13 @@
         <p class="movement-pillars__eyebrow">THE OMGO FAMILY</p>
 
         <h2 id="movement-pillars-title" class="movement-pillars__title">
-          One Recovery Idea<br> Felt in Two OMGO Ways.
+          One Recovery Idea<br> Felt in Two Ways.
         </h2>
 
         <p class="movement-pillars__intro">
-          Your recovery naturally feels different from day to day. OMGO is designed to make it <strong>personal</strong>, controllable and 
-          easy to return to, adapted in two distinct forms, OMGO mini and OMGO sphere, for different moments, spaces and routines 
-          throughout your day.
+          Your recovery naturally feels different from day to day. <strong>OMGO</strong> is designed to make it <strong>personal</strong>, controllable and 
+          easy to return to, adapted in two distinct forms, <span><a href="#OMGO-sphere"><strong>OMGO-sphere</strong></a></span> and 
+          <span><a href="#OMGO-mini"><strong>OMGO-mini</strong></a></span>, for different moments, spaces and routines throughout your day.
         </p>
       </header>
 
@@ -160,19 +222,24 @@
     </div>
   </section>
 
-  <!-- SECTION 3.5 — Product Texture Banner -->
-  <section class="section product-texture-banner" aria-label="OMGO product texture and material detail">
-    <div class="product-texture-banner__media" aria-hidden="true">
-      <img
-        class="product-texture-banner__image"
-        src="assets/home-page-section-3-4.webp"
-        alt=""
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-
-    <div class="product-texture-banner__veil" aria-hidden="true"></div>
+  <!-- Product Gallery - OMGO-sphere & OMGO-mini -->
+  <section class="omnx-product-gallery" data-product-gallery aria-label="OMGO Sphere and Mini product gallery">
+    <!-- Add more list items here; the navigation updates automatically. -->
+    <ul class="omnx-product-gallery__track" id="omnx-product-gallery-track" data-product-gallery-track tabindex="0" aria-label="Product photographs">
+      <li class="omnx-product-gallery__slide">
+        <img src="assets/sphere-and-mini-2.webp" width="5504" height="3072" alt="Dark OMGO Mini and two-tone OMGO Sphere side by side on coastal sandstone" loading="eager" decoding="async" fetchpriority="low" draggable="false" />
+      </li>
+      <li class="omnx-product-gallery__slide">
+        <img src="assets/sphere-and-mini-1.webp" width="5504" height="3072" alt="Ivory OMGO Mini and grey OMGO Sphere resting on a sandstone ledge above the sea" loading="eager" decoding="async" fetchpriority="low" draggable="false" />
+      </li>
+      <li class="omnx-product-gallery__slide">
+        <img src="assets/sphere-and-mini-1-v2.webp" width="5504" height="3072" alt="Ivory OMGO Mini and grey OMGO Sphere resting on a sandstone ledge above the sea" loading="eager" decoding="async" fetchpriority="low" draggable="false" />
+      </li>
+      <li class="omnx-product-gallery__slide">
+        <img src="assets/sphere-and-mini-3.webp" width="5504" height="3072" alt="Dark OMGO Mini and two-tone OMGO Sphere side by side on coastal sandstone" loading="eager" decoding="async" fetchpriority="low" draggable="false" />
+      </li>
+    </ul>
+    <div class="omnx-product-gallery__nav" data-product-gallery-nav role="group" aria-label="Choose a product photograph" hidden></div>
   </section>
 
   <!-- SECTION 4 — Founder Story / Invented in the UK -->
@@ -270,7 +337,7 @@
         <p class="subheading pitch-why__sub">
           A massager's speed, force and utility matter, but they are only part of the whole user experience. Touch, sound, 
           rhythm, comfort, context and user choice all shape how a recovery routine feels. OMNX brings these elements 
-          together in a more personal, controllable approach to everyday recovery.
+          together in a more personal and controllable approach to everyday recovery.
         </p>
       </div>
 
@@ -344,10 +411,10 @@
         </p>
 
         <p class="hero-card-subtitle">
-          That is why we have invested <span class="highlighted">more than 3,000 hours</span> in designing, prototyping,
-          testing and refining <span class="highlighted">OMGO</span> from the ground up, bringing mechanics, electronics, 
-          materials, firmware and sensory interaction together in recovery tools that feel 
-          <span class="highlighted">clear, controllable and convenient</span> in use.
+          We have invested <span class="highlighted">more than 3,000 hours</span> in designing, prototyping,
+          testing and refining <span class="highlighted">OMGO</span>, bringing mechanics, electronics, 
+          materials, firmware and sensory interaction together to make recovery tools feel 
+          <span class="highlighted">precise, convenient and controllable</span> in use.
         </p>
       </div>
 
@@ -360,31 +427,37 @@
     </div>
   </section>
 
-  <!-- HOW → FUTURE TRANSITION BANNER -->
-  <section
-    class="section how-future-banner"
-    aria-label="Hardware-first recovery technology"
-  >
-    <div class="how-future-banner__media" aria-hidden="true">
-      <img
-        class="how-future-banner__image"
-        src="assets/home-page-section-5-how-future.webp"
-        alt=""
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
+  <!-- SECTION 6 — CTA for beta testing -->
+  <section class="section final-cta" aria-labelledby="final-cta-title" data-final-cta-reveal>
+    <div class="final-cta__bg" aria-hidden="true"></div>
+    <div class="final-cta__bg-wash" aria-hidden="true"></div>
 
-    <div class="how-future-banner__veil" aria-hidden="true"></div>
+    <div class="final-cta__inner">
+      <div class="final-cta__card">
+        <div class="final-cta__glow final-cta__glow--one" aria-hidden="true"></div>
+        <div class="final-cta__glow final-cta__glow--two" aria-hidden="true"></div>
 
-    <div class="how-future-banner__inner">
-      <div class="how-future-banner__copy">
-        <p class="how-future-banner__eyebrow">THE BRIDGE</p>
+        <p class="final-cta__eyebrow">MVP TESTING / PRE-LAUNCH</p>
 
-        <h2 class="how-future-banner__title">
-          <span class="how-future-banner__title-main">Built to be felt.</span>
-          <span class="how-future-banner__title-sub">Designed to become smarter.</span>
+        <h2 id="final-cta-title" class="final-cta__title">
+          Help shape OMGO before launch.
         </h2>
+
+        <p class="final-cta__copy">
+          OMNX is preparing a limited <strong>MVP testing phase</strong> for selected early users.
+          Join the pre-launch list or apply to test OMGO and share genuine <strong>feedback</strong>
+          to help refine the product before launch.
+        </p>
+
+        <div class="final-cta__actions">
+          <a class="cta-button final-cta__primary" href="pre-launch-sign-up.html">
+            <span class="button_label">Apply for MVP Testing</span>
+          </a>
+
+          <a class="cta-button secondary final-cta__secondary" href="#" data-newsletter-trigger>
+            <span class="button_label">Get updates</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -500,55 +573,18 @@
     </div>
   </section>
 
-  <!-- SECTION 6 — FINAL CTA -->
-  <section class="section final-cta" aria-labelledby="final-cta-title" data-final-cta-reveal>
-    <div class="final-cta__bg" aria-hidden="true"></div>
-    <div class="final-cta__bg-wash" aria-hidden="true"></div>
-
-    <div class="final-cta__inner">
-      <div class="final-cta__card">
-        <div class="final-cta__glow final-cta__glow--one" aria-hidden="true"></div>
-        <div class="final-cta__glow final-cta__glow--two" aria-hidden="true"></div>
-
-        <p class="final-cta__eyebrow">MVP TESTING / PRE-LAUNCH</p>
-
-        <h2 id="final-cta-title" class="final-cta__title">
-          Help shape OMGO before launch.
-        </h2>
-
-        <p class="final-cta__copy">
-          OMNX is preparing a limited <strong>MVP testing phase</strong> for selected early users.
-          Join the pre-launch list or apply to test OMGO and share genuine <strong>feedback</strong>
-          to help refine the product before launch.
-        </p>
-
-        <div class="final-cta__actions">
-          <a class="cta-button final-cta__primary" href="pre-launch-sign-up.html">
-            <span class="button_label">Apply for MVP Testing</span>
-          </a>
-
-          <a class="cta-button secondary final-cta__secondary" href="#" data-newsletter-trigger>
-            <span class="button_label">Get updates</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
   <!-- FOOTER -->
   <div data-include="partials/footer.html"></div>
 
   <!-- Created on demand: Vimeo is not contacted until the film is opened. -->
   <dialog
-    id="omgo-mini-film"
+    id="omnx-product-film"
     class="omnx-film"
-    aria-labelledby="omgo-mini-film-title"
+    aria-labelledby="omnx-product-film-title"
     data-omnx-film
-    data-omnx-film-id="1239016961"
   >
     <div class="omnx-film__stage" data-omnx-film-stage data-state="loading">
-      <h2 id="omgo-mini-film-title" class="omnx-film__sr-only">OMGO-mini product film</h2>
+      <h2 id="omnx-product-film-title" class="omnx-film__sr-only" data-omnx-film-heading>OMGO product film</h2>
 
       <button class="omnx-modal__close" type="button" data-omnx-film-close aria-label="Close film">
         <span aria-hidden="true">×</span>
@@ -559,7 +595,7 @@
 
         <div class="omnx-film__status" data-omnx-film-loading role="status" aria-live="polite">
           <span class="omnx-film__spinner" aria-hidden="true"></span>
-          <p>Loading the OMGO-mini film…</p>
+          <p>Loading the product film…</p>
         </div>
 
         <div class="omnx-film__status" data-omnx-film-error role="alert" hidden>
@@ -575,7 +611,7 @@
 
   <!-- Scripts -->
   <script defer="" src="js/loading.js"></script>
-  <script defer src="js/script.js?v=20261024-film1"></script>
+  <script defer src="js/script.js?v=20261114-eager-images"></script>
   <script defer src="js/partials.js"></script>
 </body>
 
