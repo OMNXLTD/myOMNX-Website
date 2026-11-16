@@ -5,11 +5,11 @@
 <head>
   <meta charset="utf-8" />
   <title>OMNX — Personalise Recovery</title>
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
   <link href="https://fonts.googleapis.com" rel="preconnect" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet" />
-  <link href="css/universal.css?v=20261114-product-gallery" rel="stylesheet" type="text/css" />
+  <link href="css/universal.css?v=20261116-article-modals" rel="stylesheet" type="text/css" />
   <link href="assets/favicon.jpg" rel="shortcut icon" type="image/x-icon" />
   <link href="assets/webclip.jpg" rel="apple-touch-icon" />
   <meta
@@ -151,11 +151,19 @@
           <span class="how-future-banner__title-main">Built to be felt.</span>
         </h2>
 
-
-
         <p class="hero-card-subtitle">
           A healthy habit can start with a moment <span class="highlighted">worth repeating.</span>
         </p>
+
+        <button
+          class="cta-button secondary"
+          type="button"
+          data-omnx-modal-open="massage-ball"
+          aria-haspopup="dialog"
+          aria-controls="omnx-massage-ball-dialog"
+        >
+          <span class="button_label">What is a vibrating massage ball?</span>
+        </button>
       </div>
     </div>
   </section>
@@ -269,55 +277,6 @@
       </div>
     </div>
 
-    <!-- Story Modal -->
-    <div
-      class="omnx-modal"
-      data-omnx-modal="founder-story"
-      aria-hidden="true"
-    >
-      <div class="omnx-modal__backdrop" data-omnx-modal-close></div>
-
-      <button
-        class="omnx-modal__close"
-        type="button"
-        data-omnx-modal-close
-        aria-label="Close OMNX story"
-      >
-        ×
-      </button>
-
-      <div
-        class="omnx-modal__panel"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="omnx-modal-title"
-      >
-
-        <p class="omnx-modal__eyebrow">THE FOUNDER STORY</p>
-
-        <h3 id="omnx-modal-title" class="omnx-modal__title">
-          From a simple question to working devices.
-        </h3>
-
-        <div class="omnx-modal__body">
-          <p class="omnx-modal__copy">
-            OMGO began with a simple observation: many recovery tools are powerful, but they often feel cold, clinical, and easy to forget. Many recovery devices are used only when soreness appears; a tactile object, by contrast, invites the hand before the mind has even decided to use it.
-          </p>
-
-          <p class="omnx-modal__copy">
-            The early idea was inspired by that difference. What if recovery could feel less like a task and more like something designed to be picked up, held, twisted, personalised and returned to? That question led OMNX toward a new kind of recovery object: one shaped around movement, touch, vibration, and daily interaction rather than utility alone.
-          </p>
-
-          <p class="omnx-modal__copy">
-            Turning that idea into a credible product required a full clean-slate engineering effort. OMNX has been built through hands-on work across product design, electronics, mechanics, materials, firmware, prototyping, supplier development, and real-world testing — with every surface, internal structure, vibration feel, and interaction refined toward a more human product experience.
-          </p>
-
-          <p class="omnx-modal__copy">
-            The result is OMGO, the first product from a founder-led recovery technology brand. It is playful on the surface, serious underneath, and designed to make personal recovery feel more expressive, tactile, and easier to build into everyday life.
-          </p>
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- SECTION 5: THE PITCH — WHY / HOW / FUTURE -->
@@ -488,23 +447,79 @@
       </div>
     </div>
 
-    <!-- myOMNX+ Modal -->
-    <div
-      class="omnx-modal"
-      data-omnx-modal="myomnx-plus"
-      aria-hidden="true"
+  </section>
+
+  <!-- Page-level article pop-ups -->
+  <!-- Story Modal -->
+  <div
+    class="omnx-modal"
+    data-omnx-modal="founder-story"
+    aria-hidden="true"
+  >
+    <div class="omnx-modal__backdrop" data-omnx-modal-close></div>
+
+    <button
+      class="omnx-modal__close"
+      type="button"
+      data-omnx-modal-close
+      aria-label="Close OMNX story"
     >
-      <div class="omnx-modal__backdrop" data-omnx-modal-close></div>
+      ×
+    </button>
 
-      <button
-        class="omnx-modal__close"
-        type="button"
-        data-omnx-modal-close
-        aria-label="Close myOMNX+ article"
+    <div class="omnx-modal__scroll" data-omnx-modal-close>
+      <div
+        class="omnx-modal__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="omnx-modal-title"
       >
-        ×
-      </button>
 
+        <p class="omnx-modal__eyebrow">THE FOUNDER STORY</p>
+
+        <h3 id="omnx-modal-title" class="omnx-modal__title">
+          From a simple question to working devices.
+        </h3>
+
+        <div class="omnx-modal__body">
+          <p class="omnx-modal__copy">
+            OMGO began with a simple observation: many recovery tools are powerful, but they often feel cold, clinical, and easy to forget. Many recovery devices are used only when soreness appears; a tactile object, by contrast, invites the hand before the mind has even decided to use it.
+          </p>
+
+          <p class="omnx-modal__copy">
+            The early idea was inspired by that difference. What if recovery could feel less like a task and more like something designed to be picked up, held, twisted, personalised and returned to? That question led OMNX toward a new kind of recovery object: one shaped around movement, touch, vibration, and daily interaction rather than utility alone.
+          </p>
+
+          <p class="omnx-modal__copy">
+            Turning that idea into a credible product required a full clean-slate engineering effort. OMNX has been built through hands-on work across product design, electronics, mechanics, materials, firmware, prototyping, supplier development, and real-world testing — with every surface, internal structure, vibration feel, and interaction refined toward a more human product experience.
+          </p>
+
+          <p class="omnx-modal__copy">
+            The result is OMGO, the first product from a founder-led recovery technology brand. It is playful on the surface, serious underneath, and designed to make personal recovery feel more expressive, tactile, and easier to build into everyday life.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- myOMNX+ Modal -->
+  <div
+    class="omnx-modal"
+    data-omnx-modal="myomnx-plus"
+    aria-hidden="true"
+  >
+    <div class="omnx-modal__backdrop" data-omnx-modal-close></div>
+
+    <button
+      class="omnx-modal__close"
+      type="button"
+      data-omnx-modal-close
+      aria-label="Close myOMNX+ article"
+    >
+      ×
+    </button>
+
+    <div class="omnx-modal__scroll" data-omnx-modal-close>
       <div
         class="omnx-modal__panel"
         role="dialog"
@@ -571,7 +586,43 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- The Bridge: massage ball explainer -->
+  <div class="omnx-modal" data-omnx-modal="massage-ball" aria-hidden="true">
+    <div class="omnx-modal__backdrop" data-omnx-modal-close></div>
+
+    <button class="omnx-modal__close" type="button" data-omnx-modal-close aria-label="Close massage ball explainer">
+      ×
+    </button>
+
+    <div class="omnx-modal__scroll" data-omnx-modal-close>
+      <div
+        class="omnx-modal__panel"
+        id="omnx-massage-ball-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="omnx-massage-ball-title"
+      >
+        <p class="omnx-modal__eyebrow">OMGO EXPLAINED</p>
+        <h3 id="omnx-massage-ball-title" class="omnx-modal__title">
+          What is a vibrating massage ball?
+        </h3>
+
+        <div class="omnx-modal__body">
+          <p class="omnx-modal__copy">
+            A vibrating massage ball is a portable, powered massager that fits in your hand. When you hold it against a muscle, you feel the ball vibrate against it.
+          </p>
+          <p class="omnx-modal__copy">
+            A massage gun is another kind of handheld massager. It has a head that moves back and forth quickly, creating a series of small taps. That tapping action is called percussion. With OMGO, the rounded device itself is the surface you feel.
+          </p>
+          <p class="omnx-modal__copy">
+            OMGO-mini and OMGO-sphere are two takes on that rounded design, made for different moments in your day.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <div data-include="partials/footer.html"></div>
@@ -611,7 +662,7 @@
 
   <!-- Scripts -->
   <script defer="" src="js/loading.js"></script>
-  <script defer src="js/script.js?v=20261114-eager-images"></script>
+  <script defer src="js/script.js?v=20261116-article-modals"></script>
   <script defer src="js/partials.js"></script>
 </body>
 

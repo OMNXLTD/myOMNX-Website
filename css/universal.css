@@ -2098,15 +2098,25 @@ html.omnx-film-open body {
 
 /* ---------------------------------- OMNX Generic Article Modal ---------------------------------- */
 
+html.omnx-article-open {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html.omnx-article-open body {
+  position: fixed;
+  top: var(--omnx-article-page-top);
+  left: var(--omnx-article-page-left);
+  width: var(--omnx-article-page-width);
+}
+
 .omnx-modal {
   position: fixed;
-  inset: 0;
+  top: var(--omnx-article-top, 0px);
+  left: var(--omnx-article-left, 0px);
+  width: var(--omnx-article-width, 100%);
+  height: var(--omnx-article-height, var(--omnx-article-default-height, 100vh));
   z-index: 20000;
-
-  display: grid;
-  place-items: center;
-
-  padding: clamp(1rem, 4vw, 2rem);
 
   /*
     Keep wrapper itself visually neutral.
@@ -2116,8 +2126,7 @@ html.omnx-film-open body {
   visibility: hidden;
   pointer-events: none;
 
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 
   transition:
     visibility 0s linear 520ms;
@@ -2131,9 +2140,31 @@ html.omnx-film-open body {
     visibility 0s linear 0s;
 }
 
-/* Backdrop only catches clicks when modal is open */
+@supports (height: 100dvh) {
+  .omnx-modal { --omnx-article-default-height: 100dvh; }
+}
+
+.omnx-modal__scroll {
+  --omnx-article-padding: clamp(1rem, 4vw, 2rem);
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  align-items: start;
+  align-items: safe center;
+  padding:
+    max(var(--omnx-article-padding), env(safe-area-inset-top))
+    max(var(--omnx-article-padding), env(safe-area-inset-right))
+    max(var(--omnx-article-padding), env(safe-area-inset-bottom))
+    max(var(--omnx-article-padding), env(safe-area-inset-left));
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+}
+
+/* The backdrop stays in place while the article scrolls. */
 .omnx-modal__backdrop {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
 
@@ -2171,12 +2202,10 @@ html.omnx-film-open body {
   -webkit-backdrop-filter: blur(16px) saturate(1.06);
 
   opacity: 1;
-  pointer-events: auto;
 }
 
 /*
-  The panel is naturally tall.
-  The whole modal scrolls, not just the paragraph body.
+  The whole article scrolls together in .omnx-modal__scroll.
 */
 .omnx-modal__panel {
   position: relative;
@@ -2274,6 +2303,10 @@ html.omnx-film-open body {
     background 200ms ease,
     color 200ms ease,
     transform 260ms cubic-bezier(.2, .9, .2, 1) 160ms;
+}
+
+.omnx-modal > .omnx-modal__close {
+  position: absolute;
 }
 
 .omnx-modal.is-open .omnx-modal__close {
@@ -4492,17 +4525,8 @@ html.omnx-modal-lock body{
     flex-direction: column;
     justify-content: space-between;
   }
-  .omnx-modal {
-    display: grid;
-    place-items: center;
-
-    padding:
-      max(1rem, env(safe-area-inset-top))
-      1rem
-      max(1rem, env(safe-area-inset-bottom));
-
-    overflow-y: auto;
-    overflow-x: hidden;
+  .omnx-modal__scroll {
+    --omnx-article-padding: 1rem;
   }
   .omnx-modal__panel {
     width: 85%;

@@ -178,65 +178,79 @@
 
   if (!openButtons.length || !modals.length) return;
 
-  let lastFocusedElement = null;
+  const root = document.documentElement;
+  const viewport = window.visualViewport;
+  let opener = null;
   let activeModal = null;
+  let pagePosition = null;
 
   function getModalByName(name) {
     return document.querySelector(`[data-omnx-modal="${CSS.escape(name)}"]`);
   }
 
-  function openOMNXModal(modal) {
-    if (!modal) return;
+  function fitModalToViewport() {
+    if (!activeModal || !viewport) return;
+    activeModal.style.setProperty("--omnx-article-top", `${viewport.offsetTop}px`);
+    activeModal.style.setProperty("--omnx-article-left", `${viewport.offsetLeft}px`);
+    activeModal.style.setProperty("--omnx-article-width", `${viewport.width}px`);
+    activeModal.style.setProperty("--omnx-article-height", `${viewport.height}px`);
+  }
 
-    lastFocusedElement = document.activeElement;
+  function openOMNXModal(modal, trigger) {
+    if (!modal || activeModal) return;
+
+    opener = trigger;
+    pagePosition = { x: window.scrollX, y: window.scrollY };
+    root.style.setProperty("--omnx-article-page-top", `${-pagePosition.y}px`);
+    root.style.setProperty("--omnx-article-page-left", `${-pagePosition.x}px`);
+    root.style.setProperty("--omnx-article-page-width", `${root.clientWidth}px`);
+    root.classList.add("omnx-article-open");
     activeModal = modal;
+    fitModalToViewport();
 
+    const scroller = modal.querySelector(".omnx-modal__scroll");
+    if (scroller) scroller.scrollTop = 0;
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("omnx-modal-open");
 
     const closeButton = modal.querySelector(".omnx-modal__close");
-    if (closeButton) closeButton.focus();
+    closeButton?.focus({ preventScroll: true });
   }
 
   function closeOMNXModal(modal = activeModal) {
-    if (!modal) return;
+    if (!modal || modal !== activeModal) return;
 
+    activeModal = null;
     modal.classList.remove("is-open");
+    root.classList.remove("omnx-article-open");
+    root.style.removeProperty("--omnx-article-page-top");
+    root.style.removeProperty("--omnx-article-page-left");
+    root.style.removeProperty("--omnx-article-page-width");
+    opener?.focus({ preventScroll: true });
+    window.scrollTo({ left: pagePosition.x, top: pagePosition.y, behavior: "instant" });
     modal.setAttribute("aria-hidden", "true");
-
-    const stillOpen = document.querySelector(".omnx-modal.is-open");
-    if (!stillOpen) {
-      document.body.classList.remove("omnx-modal-open");
-      activeModal = null;
-    }
-
-    if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
-      lastFocusedElement.focus();
-    }
+    opener = null;
+    pagePosition = null;
   }
 
   openButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const modalName = button.getAttribute("data-omnx-modal-open");
       const modal = getModalByName(modalName);
-      openOMNXModal(modal);
+      openOMNXModal(modal, button);
     });
   });
 
   modals.forEach((modal) => {
-    const closeButtons = modal.querySelectorAll("[data-omnx-modal-close]");
-
-    closeButtons.forEach((button) => {
-      button.addEventListener("click", () => closeOMNXModal(modal));
-    });
-
     modal.addEventListener("click", (event) => {
       if (event.target.matches("[data-omnx-modal-close]")) {
         closeOMNXModal(modal);
       }
     });
   });
+
+  viewport?.addEventListener("resize", fitModalToViewport);
+  viewport?.addEventListener("scroll", fitModalToViewport);
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && activeModal) {
